@@ -11,10 +11,10 @@ Display a prompt when waiting for a new command.
 * Handle " (double quote) which should prevent the shell from interpreting the meta- characters in the quoted sequence except for $ (dollar sign).
 
  * Implement redirections:
-  * < should redirect input.
-  * > should redirect output.
-  * << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history!
-  * >> should redirect output in append mode.
+  * "<" should redirect input.
+  * ">" should redirect output.
+  * "<<" should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history!
+  * ">>" should redirect output in append mode.
 * Implement pipes (| character). The output of each command in the pipeline is
 connected to the input of the next command via a pipe.
 * Handle environment variables ($ followed by a sequence of characters) which should expand to their values.
