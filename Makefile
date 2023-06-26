@@ -1,0 +1,58 @@
+# COLORS
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
+
+CC = cc
+CFLAGS = -Wall -Werror -Wextra
+LIBFT_PATH = include/libft
+# Add any other static library in the same fashion - 1
+
+# INCLUDE: .h files or .a library folders
+# SRC: .c files
+SRC_DIR = src
+OBJ_DIR = obj
+INCLUDE_DIR = include
+
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
+
+LIBFT = $(LIBFT_PATH)/libft.a
+# Add any other static library in the same fashion - 2
+
+NAME = name_of_executable
+
+.PHONY: all clean fclean re
+
+all: $(NAME)
+
+$(NAME): $(OBJ_FILES) $(LIBFT)
+	@$(CC) $(CFLAGS) -o $@ $^ -L$(LIBFT_PATH)
+	@echo "$(GREEN)$(NAME) created.$(RESET)"
+# Add any other static library in the same fashion as $(LIBFT) AND -I$(LIBFT_PATH) - 3
+
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -I$(LIBFT_PATH) -c -o $@ $<
+	@echo "$(NAME): $(GREEN)$(OBJ_DIR) was created$(RESET)"
+# Add any other static library in the same fashion as -I$(LIBFT_PATH) - 4
+
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_PATH)
+	@echo "$(GREEN)$(LIBFT) created.$(RESET)"
+# Add any other static library in the same fashion - 5
+
+clean:
+	@$(MAKE) -C $(LIBFT_PATH) clean
+# Add any other static library in the same fashion - 6
+	@$(RM) -r $(OBJ_DIR)
+	@echo "$(RED)$(OBJ_DIR) deleted.$(RESET)"
+
+fclean: clean
+	@$(MAKE) -C $(LIBFT_PATH) fclean
+	@$(RM) $(NAME)
+	@echo "$(RED)$(NAME) deleted.$(RESET)"
+# Add any other static library in the same fashion - 7
+
+re: fclean all
