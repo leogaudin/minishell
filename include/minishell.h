@@ -6,7 +6,13 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/06/27 15:26:37 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/06/27 15:32:01 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+# include "libft/libft.h"
+
+#endif
