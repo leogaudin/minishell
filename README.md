@@ -10,7 +10,7 @@ Display a prompt when waiting for a new command.
 * Handle ’ (single quote) which should prevent the shell from interpreting the meta- characters in the quoted sequence.
 * Handle " (double quote) which should prevent the shell from interpreting the meta- characters in the quoted sequence except for $ (dollar sign).
 
- * Implement redirections:
+* Implement redirections:
   * "<" should redirect input.
   * ">" should redirect output.
   * "<<" should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history!
@@ -28,7 +28,8 @@ connected to the input of the next command via a pipe.
 
 * Your shell must implement the following builtins:
   * echo with option -n
-  * cd with only a relative or absolute path   * pwd with no options
+  * cd with only a relative or absolute path
+  * pwd with no options
   * export with no options
   * unset with no options
   * env with no options or arguments
