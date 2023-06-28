@@ -6,28 +6,19 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 12:53:57 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/06/09 13:46:43 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/06/28 10:05:56 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-int	ft_print_hexa(unsigned long long n, char c, t_flags *flags)
+int	ft_print_hexa(unsigned long long n, char c)
 {
 	int	count;
 
 	count = 0;
-	if (flags->hash)
-	{
-		if (c == 'x')
-			count += ft_print_string("0x");
-		else if (c == 'X')
-			count += ft_print_string("0X");
-		flags->hash = 0;
-	}
 	if (n >= 16)
-		count += ft_print_hexa(n / 16, c, flags);
+		count += ft_print_hexa(n / 16, c);
 	if (c == 'x')
 		ft_putchar_fd("0123456789abcdef"[n % 16], 1);
 	else if (c == 'X')
