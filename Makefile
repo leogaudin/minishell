@@ -35,19 +35,16 @@ $(NAME): $(OBJ_FILES) $(LIBFT)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -I$(LIBFT_PATH) -c -o $@ $<
-	@echo "$(NAME): $(GREEN)$(OBJ_DIR) was created$(RESET)"
 # Add any other static library in the same fashion as -I$(LIBFT_PATH) - 4
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_PATH)
-	@echo "$(GREEN)$(LIBFT) created.$(RESET)"
 # Add any other static library in the same fashion - 5
 
 clean:
 	@$(MAKE) -C $(LIBFT_PATH) clean
 # Add any other static library in the same fashion - 6
 	@$(RM) -r $(OBJ_DIR)
-	@echo "$(RED)$(OBJ_DIR) deleted.$(RESET)"
 
 fclean: clean
 	@$(MAKE) -C $(LIBFT_PATH) fclean
