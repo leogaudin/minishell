@@ -27,7 +27,7 @@ The shell should:
 * Implement **pipes** (`|` character). The output of each command in the pipeline is
 connected to the input of the next command via a pipe.
 * Handle **environment variables** (`$` followed by a sequence of characters) which should expand to their values.
-* Handle $? which should expand to the exit status of the most recently executed foreground pipeline.
+* Handle `$?` which should expand to the exit status of the most recently executed foreground pipeline.
 * Handle `ctrl-C`, `ctrl-D` and `ctrl-\` which should behave like in bash.
 
 * In interactive mode:
