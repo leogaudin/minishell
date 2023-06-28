@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:50:27 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/06/28 10:05:36 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/06/28 10:42:01 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,8 @@ int					ft_print_pointer(unsigned long long p);
 int					ft_print_int(int n);
 int					ft_print_unsigned(unsigned int n);
 int					ft_print_percent(void);
+
+// Custom add-ons
+void				ft_free_tab(char **tab);
 
 #endif

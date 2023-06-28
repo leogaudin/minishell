@@ -1,21 +1,41 @@
-NAME		=	libft.a
-CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra
-OBJ			=	ft_isalnum.o ft_itoa.o ft_memset.o ft_split.o ft_strlcat.o ft_strnstr.o ft_toupper.o ft_isalpha.o ft_memchr.o ft_putchar_fd.o ft_strchr.o ft_strlcpy.o ft_strrchr.o ft_atoi.o ft_isascii.o ft_memcmp.o ft_putendl_fd.o ft_strdup.o ft_strlen.o ft_strtrim.o ft_bzero.o ft_isdigit.o ft_memcpy.o ft_putnbr_fd.o ft_striteri.o ft_strmapi.o ft_substr.o ft_calloc.o ft_isprint.o ft_memmove.o ft_putstr_fd.o ft_strjoin.o ft_strncmp.o ft_tolower.o ft_lstnew_bonus.o ft_lstadd_front_bonus.o ft_lstsize_bonus.o ft_lstlast_bonus.o ft_lstadd_back_bonus.o ft_lstdelone_bonus.o ft_lstclear_bonus.o ft_lstiter_bonus.o ft_lstmap_bonus.o ft_intlen.o get_next_line.o get_next_line_utils.o ft_print_char.o ft_print_string.o ft_print_pointer.o ft_print_int.o ft_print_unsigned.o ft_print_hexa.o ft_print_percent.o ft_printf.o
-HEADERS	=	libft.h
+# COLORS
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
+
+CC = cc
+CFLAGS = -Wall -Werror -Wextra
+# Add any other static library in the same fashion - 1
+
+# INCLUDE: .h files or .a library folders
+# SRC: .c files
+SRC_DIR = src
+OBJ_DIR = obj
+
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
+
+# Add any other static library in the same fashion - 2
+
+NAME = libft.a
+
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@ar rcs $(NAME) $(OBJ)
+$(NAME): $(OBJ_FILES)
+	@ar rcs $(NAME) $(OBJ_FILES)
+	@echo "$(GREEN)$(NAME) created.$(RESET)"
 
-%.o: %.c $(HEADERS)
-	@$(CC) $(CFLAGS) -c $<
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	@rm -f $(OBJ)
+	@$(RM) -r $(OBJ_DIR)
 
 fclean: clean
-	@rm -f $(NAME)
+	@$(RM) $(NAME)
+	@echo "$(RED)$(NAME) deleted.$(RESET)"
 
-re: fclean $(NAME)
+re: fclean all
