@@ -1,27 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tab.c                                      :+:      :+:    :+:   */
+/*   ft_strnstr_rev.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 10:25:16 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/01 15:04:38 by lgaudin          ###   ########.fr       */
+/*   Created: 2023/07/01 14:25:07 by lgaudin           #+#    #+#             */
+/*   Updated: 2023/07/01 14:25:21 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_free_tab(char **tab)
+char	*ft_strnstr_rev(const char *big, const char *little, size_t len)
 {
 	int	i;
+	int	j;
 
-	i = 0;
-	while (tab[i])
+	if (little[0] == '\0' || (len == 0 && !big))
+		return ((char *)big);
+	i = ft_strlen(big) - 1;
+	while (big[i] != '\0' && (size_t)i >= 0)
 	{
-		if (tab[i])
-			free(tab[i++]);
+		j = 0;
+		while (little[j] != '\0' && (size_t)i + j < len)
+		{
+			if (big[i + j] == little[j])
+			{
+				j++;
+			}
+			else
+				break ;
+		}
+		if (little[j] == '\0')
+		{
+			return ((char *)big + i);
+		}
+		i--;
 	}
-	if (tab)
-		free(tab);
+	return (0);
 }
