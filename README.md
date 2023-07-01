@@ -1,13 +1,5 @@
 # minishell
 Write your own Shell.
-
-## TODO
-### Tokenizer
-- We need to define structures for every type of token (pipes, redirections, etc.)
-- We need to define a structure for the command line (a list of tokens)
-* Video of a guy who makes a C tokenizer: [https://www.youtube.com/watch?v=AqyZztKlSGQ](https://www.youtube.com/watch?v=AqyZztKlSGQ)
-
----
 ## Requirements
 ### Mandatory
 The shell should:
