@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/01 16:30:34 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/01 16:35:05 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ typedef struct s_node
 	struct s_node	*right;
 }					t_node;
 
-t_node				*create_node(char *operator, char * operand);
+t_node				*create_node(char *operator, char *operand);
 void				destroy_node(t_node *t_node);
 t_node				*create_operator_node(char *operator);
 t_node				*create_operand_node(char *operand);
-t_node	*generate_node_from_command(const char *command);
+t_node				*generate_node_from_command(const char *command);
 
 // dev_utils.c
 void				print_ast(t_node *root, int indent);
