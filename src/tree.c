@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/01 16:39:33 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/01 17:14:48 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,10 @@ t_node	*generate_node_from_command(const char *command)
 	root = NULL;
 	token = NULL;
 	commands = NULL;
-	if (ft_strnstr(command, "||", ft_strlen(command)))
-		token = "||";
-	else if (ft_strnstr(command, "&&", ft_strlen(command)))
+	if (ft_strnstr(command, "&&", ft_strlen(command)))
 		token = "&&";
+	else if (ft_strnstr(command, "||", ft_strlen(command)))
+		token = "||";
 	if (token)
 	{
 		commands = ft_split_str_once(command, token);
