@@ -6,12 +6,18 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:29:16 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/01 16:31:30 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/01 16:34:15 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+/**
+ * @brief    Prints a visual representation of the abstract syntax tree.
+ *
+ * @param    root      The root node.
+ * @param    indent    Indent for recursive calls (set to 0 for first call).
+ */
 void	print_ast(t_node *root, int indent)
 {
 	int	i;

@@ -5,13 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 15:31:52 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/01 16:31:46 by lgaudin          ###   ########.fr       */
+/*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
+/*   Updated: 2023/07/01 16:39:33 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief    Creates a node for the abstract syntax tree.
+ *
+ * @param    operator  The operator defining the relationship between the two
+ *                   children nodes.
+ * @param    operand   The operand of the node.
+ * @return   t_node*   The newly created node.
+ */
 t_node	*create_node(char *operator, char *operand)
 {
 	t_node	*new_node;
@@ -29,16 +37,33 @@ t_node	*create_node(char *operator, char *operand)
 	return (new_node);
 }
 
+/**
+ * @brief    Creates an operand node object
+ *
+ * @param    operand   The operand of the node.
+ * @return   t_node*   The newly created node.
+ */
 t_node	*create_operand_node(char *operand)
 {
 	return (create_node(NULL, operand));
 }
 
+/**
+ * @brief    Creates an operator node object
+ *
+ * @param    operand   The operator of the node.
+ * @return   t_node*   The newly created node.
+ */
 t_node	*create_operator_node(char *operator)
 {
 	return (create_node(operator, NULL));
 }
 
+/**
+ * @brief    Destroys a node and its recursive children.
+ *
+ * @param    t_node    The node to destroy.
+ */
 void	destroy_node(t_node *t_node)
 {
 	if (t_node == NULL)
@@ -50,6 +75,20 @@ void	destroy_node(t_node *t_node)
 	free(t_node);
 }
 
+/**
+ * @brief    Generates an abstract syntax tree from a command.
+ *           The command is split into two parts, the left and right children.
+ *           The left child is the command before the operator, and the right
+ *           child is the command after the operator.
+ *           If the command does not contain an operator, the node is an
+ *           operand node.
+ *           If the command contains an operator, the node is an operator node.
+ *           The function is recursive, and will generate the tree from the
+ *           bottom up.
+ *
+ * @param    command   The command to generate the tree from.
+ * @return   t_node*   The root node of the tree.
+ */
 t_node	*generate_node_from_command(const char *command)
 {
 	t_node	*root;
