@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 13:01:52 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/01 15:02:29 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/01 15:07:58 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	strings_count(char const *str, char *token)
 {
 	int		strings_count;
-	char 	*str_copy;
+	char	*str_copy;
 
 	strings_count = 1;
 	str_copy = (char *)str;
@@ -73,7 +73,8 @@ char	**ft_split_str(char const *s, char *token)
 		return (0);
 	while (++result_index < strings_count(s, token))
 	{
-		result[result_index] = ft_substr(s, index, string_length(s, token, index));
+		result[result_index] = ft_substr(s, index, string_length(s, token,
+					index));
 		if (!(result[result_index]))
 		{
 			free_all(result, result_index);
