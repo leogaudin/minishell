@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/06/28 14:34:38 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/01 12:43:43 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 # include "libft/src/libft.h"
 # include <stdbool.h>
+# include <stdlib.h>
 
-// This is just a starter, I don't understand lexers that much so it can totally change.
-// However, I think it's a good and clean start.
+// This is just a starter, I don't understand lexers that much
+// so it can totally change.
+// However I think it's a good and clean start.
 typedef enum e_token_kind
 {
 	TOKEN_END,
@@ -57,5 +59,20 @@ typedef struct s_line
 {
 	t_token			**tokens;
 }					t_line;
+
+// binary_tree.c
+typedef struct s_node
+{
+	char			*operator;
+	char			*operand;
+	struct s_node	*left;
+	struct s_node	*right;
+}					t_node;
+
+t_node				*create_node(char *operator, char * operand);
+void				print_AST(t_node *root, int indent);
+void				destroy_node(t_node *t_node);
+t_node				*create_operator_node(char *operator);
+t_node				*create_operand_node(char *operand);
 
 #endif
