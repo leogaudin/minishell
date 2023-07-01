@@ -6,13 +6,13 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 15:31:52 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/01 16:23:55 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/01 16:31:46 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_node	*create_node(char *operator, char * operand)
+t_node	*create_node(char *operator, char *operand)
 {
 	t_node	*new_node;
 
@@ -22,7 +22,7 @@ t_node	*create_node(char *operator, char * operand)
 		ft_putendl_fd("Memory allocation failed\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	new_node->operator= operator;
+	new_node->operator = operator;
 	new_node->operand = operand;
 	new_node->left = NULL;
 	new_node->right = NULL;
@@ -50,16 +50,28 @@ void	destroy_node(t_node *t_node)
 	free(t_node);
 }
 
-void	print_AST(t_node *root, int indent)
+t_node	*generate_node_from_command(const char *command)
 {
-	if (root == NULL)
-		return ;
-	for (int i = 0; i < indent; i++)
-		ft_printf("\t");
-	if (root->operator!= NULL)
-		ft_printf("%s\n", root->operator);
-	if (root->operand != NULL)
-		ft_printf("%s\n", root->operand);
-	print_AST(root->left, indent + 1);
-	print_AST(root->right, indent + 1);
+	t_node	*root;
+	char	*token;
+	char	**commands;
+
+	root = NULL;
+	token = NULL;
+	commands = NULL;
+	if (ft_strnstr(command, "||", ft_strlen(command)))
+		token = "||";
+	else if (ft_strnstr(command, "&&", ft_strlen(command)))
+		token = "&&";
+	if (token)
+	{
+		commands = ft_split_str_once(command, token);
+		root = create_operator_node(token);
+		root->left = generate_node_from_command(commands[0]);
+		root->right = generate_node_from_command(commands[1]);
+	}
+	else
+		root = create_operand_node((char *)command);
+	// TODO: LEAKS - free commands[] without erasing them for after
+	return (root);
 }
