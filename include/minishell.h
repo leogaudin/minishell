@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/04 09:17:24 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/04 09:49:52 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_node
 	struct s_node	*right;
 }					t_node;
 
-t_node				*create_node(char *operator, char * operand);
+t_node				*create_node(char *operator, char *operand);
 void				destroy_node(t_node *t_node);
 t_node				*create_operator_node(char *operator);
 t_node				*create_operand_node(char *operand);
