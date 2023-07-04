@@ -20,7 +20,7 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 LIBFT = $(LIBFT_PATH)/libft.a
 # Add any other static library in the same fashion - 2
 
-NAME = name_of_executable
+NAME = minishell
 
 .PHONY: all clean fclean re
 
