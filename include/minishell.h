@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/09 09:35:32 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/09 13:07:09 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,15 +133,15 @@ char	**ft_splitnotstr(char *str, char c);
 char	*ft_strjoinfree(char *begin, char *end, int num);
 
 int		**ft_execfdpairs(int cmdct);
-char	*ft_execgetpathname(char *cmd, char **envp);
-char	**ft_execargums(char *cmdarg, char **env);
+char	*ft_execgetpathname(char *cmd);
+char	**ft_execargums(char *cmdarg);
 int		ft_execheredoc(char *delim);
-void	ft_execcloseall(int **fd, int pipect);
-void	ft_execchildproc(t_cmd *fullcmds, char **argums, int **fds, char **envp,
+int		ft_execcloseall(int **fd, int pipect);
+int		ft_execchildproc(t_cmd *fullcmds, char **argums, int **fds,
 			int i, int cmdct);
-void	ft_execparentproc(t_cmd *fullcmds, char **argums, int **fds,
+int		ft_execparentproc(char **argums, int **fds,
 			int childpid, int *i);
-int		ft_executer(t_cmd *fullcmds, int cmdct, char **env);
+int		ft_executer(t_cmd *fullcmds, int cmdct);
 
 int		ft_min(int a, int b);
 char	*ft_pathname(char *cmd, char **paths);
