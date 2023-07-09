@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/09 13:07:09 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/09 13:15:59 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ char	*ft_getname(char *line, int *len);
 char	*straddfree(char *str, char chr);
 char	*ft_get_cmdarg(char *line);
 t_cmd	*ft_putinstruct(char **blocksep);
-void	ft_parseexec(char *line, char **env);
+int		ft_parseandexec(char *line);
 
 
 #endif
