@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/09 09:36:54 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/09 13:08:05 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-
-
 int	ft_arrlen(char **arr)
 {
 	int	i;
@@ -67,7 +64,10 @@ char	**ft_arrapp(char **arr, char *app)
 
 	newarr = malloc((ft_arrlen(arr) + 2) * sizeof(char *));
 	if (!newarr)
+	{
 		ft_freearr(arr);
+		ft_putendl_fd("Memory allocation failed\n", STDERR_FILENO);
+	}
 	if (newarr)
 	{
 		i = 0;
@@ -84,19 +84,34 @@ char	**ft_arrapp(char **arr, char *app)
 	return (newarr);
 }
 
+void	ft_freecmds(t_cmd *cmds, int n)
+{
+	int	i;
+
+	i = 0;
+	while (i < n)
+	{
+		if (cmds[i].rein.rein == 1 && cmds[i].rein.infile)
+			free(cmds[i].rein.infile);
+		if (cmds[i].rein.herein == 1 && cmds[i].rein.heredel)
+			free(cmds[i].rein.heredel);
+		if ((cmds[i].reout.reout == 1 || cmds[i].reout.reoutapp == 1) \
+			&& cmds[i].reout.outfile)
+			free(cmds[i].reout.outfile);
+		free(cmds[i].cmdarg);
+		i++;
+	}
+	free(cmds);
+}
+
 char	**ft_separatepipes(char *block)
 {
 	char 	**blocksep;
 	int		i;
 	int		len;
-	int		let;
-	int		opens;
-	int		opend;
 	char	*str;
 
 	i = 0;
-	opens = 0;
-	opend = 0;
 	blocksep = NULL;
 	while (block[i])
 	{
@@ -118,6 +133,13 @@ char	**ft_separatepipes(char *block)
 			len++;
 		}
 		str = ft_substr(&block[i], 0, len);
+		if (!str)
+		{
+			if (blocksep)
+				ft_freearr(blocksep);
+			ft_putendl_fd("Memory allocation failed\n", STDERR_FILENO);
+			return (NULL);
+		}
 		blocksep = ft_arrapp(blocksep, str);
 		i += len;
 		if (block[i] == '|')
@@ -140,7 +162,7 @@ char	*ft_getname(char *line, int *len)
 			i++;
 		name = malloc((i + 1) * sizeof(char));
 		if (!name)
-			return (NULL);
+			return (ft_putendl_fd("Memory allocation failed\n", 2), NULL);
 		j = 0;
 		while (j < i)
 		{
@@ -158,7 +180,7 @@ char	*ft_getname(char *line, int *len)
 			i++;
 		name = malloc((i + 1) * sizeof(char));
 		if (!name)
-			return (NULL);
+			return (ft_putendl_fd("Memory allocation failed\n", 2), NULL);
 		j = 0;
 		while (j < i)
 		{
@@ -175,7 +197,7 @@ char	*ft_getname(char *line, int *len)
 			i++;
 		name = malloc((i + 1) * sizeof(char));
 		if (!name)
-			return (NULL);
+			return (ft_putendl_fd("Memory allocation failed\n", 2), NULL);
 		j = 0;
 		while (j < i)
 		{
@@ -190,9 +212,9 @@ char	*ft_getname(char *line, int *len)
 
 char *straddfree(char *str, char chr)
 {
-	char *new;
-	int len;
-	int i;
+	char	*new;
+	int		len;
+	int		i;
 
 	if (!str)
 		len = 0;
@@ -200,7 +222,10 @@ char *straddfree(char *str, char chr)
 		len = ft_strlen(str);
 	new = malloc((len + 2) * sizeof(char));
 	if (!new)
+	{
+		ft_putendl_fd("Memory allocation failed\n", STDERR_FILENO);
 		return (NULL);
+	}
 	i = 0;
 	while (i < len)
 	{
@@ -214,18 +239,20 @@ char *straddfree(char *str, char chr)
 	return (new);
 }
 
-char *ft_get_cmdarg(char *line)
+char	*ft_get_cmdarg(char *line)
 {
-	int i;
-	char *new;
+	int		i;
+	char	*new;
 
 	i = 0;
-	new = NULL;
+	new = NULL;//maybe empyty string instead of null to diff between no arg and malloc error
 	while (line[i])
 	{
 		while (line[i] && line[i] != '<' && line[i] != '>')
 		{
 			new = straddfree(new, line[i]);
+			if (!new)
+				return (NULL);
 			i++;
 		}
 		if (line[i] == '<' || line[i] == '>')
@@ -256,16 +283,11 @@ char *ft_get_cmdarg(char *line)
 	return (new);
 }
 
-t_cmd *ft_putinstruct(char **blocksep)
+t_cmd	*ft_initcmds(char **blocksep, t_cmd *cmds)
 {
-	int		i;
-	int 	j;
-	int		len;
-	t_cmd	*cmds;
-	char *name;
+	int	i;
+	int	j;
 
-	cmds = malloc(ft_arrlen(blocksep) * sizeof(t_cmd));
-	//add malloc protection!!!
 	i = 0;
 	while (blocksep[i])
 	{
@@ -277,9 +299,52 @@ t_cmd *ft_putinstruct(char **blocksep)
 		cmds[i].reout.reout = 0;
 		cmds[i].reout.outfile = NULL;
 		cmds[i].cmdarg = ft_get_cmdarg(blocksep[i]);
+		if (!cmds[i].cmdarg)
+		{
+			j = 0;
+			while (j < i)
+				free(cmds[j++].cmdarg);
+			return (NULL);
+		}
+		i++;
+	}
+	return (cmds);
+}
+
+t_cmd *ft_putinstruct(char **blocksep)
+{
+	int		i;
+	int 	j;
+	int		len;
+	t_cmd	*cmds;
+	char *name;
+
+	cmds = malloc(ft_arrlen(blocksep) * sizeof(t_cmd));
+	if (!cmds)
+		return (ft_putendl_fd("Memory allocation failed\n", 2), NULL);
+	cmds = ft_initcmds(blocksep, cmds);
+	if (!cmds)
+		return (NULL);
+	i = 0;
+	while (blocksep[i])
+	{
 		j = 0;
 		while (blocksep[i][j])
 		{
+			if ((blocksep[i][j] == '\"') && ft_findchar(&blocksep[i][j + 1], '\"') == 1)
+			{
+				j++;
+				while (blocksep[i][j] != '\"')
+					j++;
+				j++;
+			}
+			else if ((blocksep[i][j] == '\'') && ft_findchar(&blocksep[i][j + 1], '\'') == 1)
+			{
+				j++;
+				while (blocksep[i][j] != '\'')
+					j++;
+				j++;
+			}
 			if (blocksep[i][j] == '<' && ft_findchar(&blocksep[i][j + 1], '<') == 0)
 			{
 				if (j > 0 && blocksep[i][j - 1] == '<')
@@ -290,6 +355,8 @@ t_cmd *ft_putinstruct(char **blocksep)
 						j++;
 					len = 0;
 					name = ft_getname(&blocksep[i][j], &len);
+					if (!name)
+						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].rein.heredel = name;
 					j += len;
 				}
@@ -301,6 +368,8 @@ t_cmd *ft_putinstruct(char **blocksep)
 						j++;
 					len = 0;
 					name = ft_getname(&blocksep[i][j], &len);
+					if (!name)
+						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].rein.infile = name;
 					j += len;
 				}
@@ -315,6 +384,8 @@ t_cmd *ft_putinstruct(char **blocksep)
 						j++;
 					len = 0;
 					name = ft_getname(&blocksep[i][j], &len);
+					if (!name)
+						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].reout.outfile = name;
 					j += len;
 				}
@@ -326,6 +397,8 @@ t_cmd *ft_putinstruct(char **blocksep)
 						j++;
 					len = 0;
 					name = ft_getname(&blocksep[i][j], &len);
+					if (!name)
+						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].reout.outfile = name;
 					j += len;
 				}
@@ -338,17 +411,20 @@ t_cmd *ft_putinstruct(char **blocksep)
 	return (cmds);
 }
 
-void	ft_parseexec(char *line, char **env)
+int	ft_parseandexec(char *line)
 {
-	char **res;
+	char	**res;
 	t_cmd	*cmds;
+	int		len;
 
 	res = ft_separatepipes(line);
+	if (!res)
+		return (-1);
+	len = ft_arrlen(res);
 	cmds = ft_putinstruct(res);
-	ft_executer(cmds, ft_arrlen(res), env);
+	if (!cmds)
+		return (ft_freearr(res), -1);
+	if (ft_executer(cmds, ft_arrlen(res)))
+		return (ft_freearr(res), ft_freecmds(cmds, len), -1);
+	return (ft_freearr(res), ft_freecmds(cmds, len), 0);
 }
-
-/* int	main(int argc, char **argv, char **env)
-{
-	ft_parseexec(argv[1], env);
-} */
