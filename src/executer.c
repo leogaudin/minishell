@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 11:52:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/07 12:32:38 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/09 09:38:33 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "temp.h"
+#include "../include/minishell.h"
+
 
 int **ft_execfdpairs(int cmdct)
 {
@@ -140,6 +140,7 @@ void	ft_execchildproc(t_cmd *fullcmds, char **argums, int **fds, char **envp, in
 
 void	ft_execparentproc(t_cmd *fullcmds, char **argums, int **fds, int childpid, int *i)
 {
+	(void)fullcmds;
 	close(fds[*i][0]);
 	close(fds[*i + 1][1]);
 	waitpid(childpid, NULL, 0);

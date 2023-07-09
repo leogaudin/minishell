@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/07 12:58:25 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/09 09:36:54 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "temp.h"
+#include "../include/minishell.h"
+
 
 
 int	ft_arrlen(char **arr)

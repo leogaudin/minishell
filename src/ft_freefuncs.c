@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_freefuncs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:34:22 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/07 12:50:59 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/09 09:37:57 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "temp.h"
+#include "../include/minishell.h"
 
 /* This function frees all the memory allocated for the output of the ft_split
  function. */

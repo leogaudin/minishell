@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_splitnotstr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 11:23:10 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/07 12:50:50 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/09 09:36:54 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "temp.h"
+#include "../include/minishell.h"
+
 
 /* This function counts the number of arrays in a null termineted array of
  arrays. */

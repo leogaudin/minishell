@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_getpathname.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:37:27 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/07 12:57:25 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/09 09:36:54 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "temp.h"
+#include "../include/minishell.h"
+
 
 /* This function returns the minimum value of the two values given to it as
  arguments. */
@@ -28,7 +28,7 @@ int	ft_min(int a, int b)
  permissions to execute it. */
 char	*ft_pathname(char *cmd, char **paths)
 {
-	int		i;	
+	int		i;
 	char	*cmdpath;
 	int		acc;
 
