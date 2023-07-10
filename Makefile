@@ -27,7 +27,7 @@ NAME = minishell
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $@ $^ -L$(LIBFT_PATH)
+	@$(CC) $(CFLAGS) -lreadline -o $@ $^ -L$(LIBFT_PATH)
 	@echo "$(GREEN)$(NAME) created.$(RESET)"
 # Add any other static library in the same fashion as $(LIBFT) AND -I$(LIBFT_PATH) - 3
 
