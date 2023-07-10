@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/10 12:56:29 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:24:50 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,32 @@ int	ft_findchar(char *str, char c)
 	{
 		if (str[i] == c)
 			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_findcharout(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == c)
+			return (1);
+		else if (str[i] == '\"' && ft_findchar(&str[i + 1], '\"'))
+		{
+			i++;
+			while (str[i] != '\"')
+				i++;
+		}
+		else if (str[i] == '\'' && ft_findchar(&str[i + 1], '\''))
+		{
+			i++;
+			while (str[i] != '\'')
+				i++;
+		}
 		i++;
 	}
 	return (0);
@@ -347,7 +373,7 @@ t_cmd *ft_putinstruct(char **blocksep)
 					j++;
 				j++;
 			}
-			if (blocksep[i][j] == '<' && ft_findchar(&blocksep[i][j + 1], '<') == 0)
+			if (blocksep[i][j] == '<' && ft_findcharout(&blocksep[i][j + 1], '<') == 0)
 			{
 				if (j > 0 && blocksep[i][j - 1] == '<')
 				{
@@ -376,7 +402,7 @@ t_cmd *ft_putinstruct(char **blocksep)
 					j += len;
 				}
 			}
-			else if (blocksep[i][j] == '>' && ft_findchar(&blocksep[i][j + 1], '>') == 0)
+			else if (blocksep[i][j] == '>' && ft_findcharout(&blocksep[i][j + 1], '>') == 0)
 			{
 				if (j > 0 && blocksep[i][j - 1] == '>')
 				{
@@ -399,6 +425,7 @@ t_cmd *ft_putinstruct(char **blocksep)
 						j++;
 					len = 0;
 					name = ft_getname(&blocksep[i][j], &len);
+					printf("name is %s", name);
 					if (!name)
 						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].reout.outfile = name;
@@ -413,7 +440,7 @@ t_cmd *ft_putinstruct(char **blocksep)
 	return (cmds);
 }
 
-int	ft_parseandexec(char *line)
+int	ft_parseandexec(char *line, char **env)
 {
 	char	**res;
 	t_cmd	*cmds;
@@ -426,7 +453,7 @@ int	ft_parseandexec(char *line)
 	cmds = ft_putinstruct(res);
 	if (!cmds)
 		return (ft_freearr(res), -1);
-	if (ft_executer(cmds, ft_arrlen(res)))
+	if (ft_executer(cmds, ft_arrlen(res), env))
 		return (ft_freearr(res), ft_freecmds(cmds, len), -1);
 	return (ft_freearr(res), ft_freecmds(cmds, len), 0);
 }
