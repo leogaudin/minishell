@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/09 13:15:59 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/10 12:54:52 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,14 @@ typedef struct s_cmd
 
 }			t_cmd;
 
+typedef struct s_fullcmd
+{
+	t_cmd	*cmds;
+	int		cmdct;
+	char	**argums;
+	int		**fds;
+}			t_fullcmd;
+
 void	ft_freesplit(char **arrstr);
 void	ft_frfds(int **fds, int i);
 void	ft_frall(char **arrstr, int **fds, int i);
@@ -137,10 +145,8 @@ char	*ft_execgetpathname(char *cmd);
 char	**ft_execargums(char *cmdarg);
 int		ft_execheredoc(char *delim);
 int		ft_execcloseall(int **fd, int pipect);
-int		ft_execchildproc(t_cmd *fullcmds, char **argums, int **fds,
-			int i, int cmdct);
-int		ft_execparentproc(char **argums, int **fds,
-			int childpid, int *i);
+int		ft_execchildproc(t_cmd *cmds, t_fullcmd	fullcmd, int i);
+int		ft_execparentproc(t_fullcmd	fullcmd, int childpid, int *i);
 int		ft_executer(t_cmd *fullcmds, int cmdct);
 
 int		ft_min(int a, int b);
@@ -157,6 +163,9 @@ char	*straddfree(char *str, char chr);
 char	*ft_get_cmdarg(char *line);
 t_cmd	*ft_putinstruct(char **blocksep);
 int		ft_parseandexec(char *line);
+
+int		ft_echo(t_fullcmd fullcmd);
+int		ft_pwd(void);
 
 
 #endif
