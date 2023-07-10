@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/10 12:54:52 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:26:05 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ void				print_ast(t_node *root, int indent);
 
 // execute_tree.c
 int					execute_command(const char *command);
-int					execute_node(t_node *node);
-int					execute_operator_node(t_node *node, int left_status);
-int					execute_operand_node(t_node *node);
+int					execute_node(t_node *node, char **env);
+int					execute_operator_node(t_node *node, int left_status, char **env);
+int					execute_operand_node(t_node *node, char **env);
 
 /**
  * Structure that holds the information about redirections.
@@ -130,42 +130,41 @@ typedef struct s_fullcmd
 	int		**fds;
 }			t_fullcmd;
 
-void	ft_freesplit(char **arrstr);
-void	ft_frfds(int **fds, int i);
-void	ft_frall(char **arrstr, int **fds, int i);
+void				ft_freesplit(char **arrstr);
+void				ft_frfds(int **fds, int i);
+void				ft_frall(char **arrstr, int **fds, int i);
 
-char	**ft_appendtoarr(char **arr, char **app);
-char	**ft_getstring(char **str, char **arrstr);
-char	**ft_splitnotstr(char *str, char c);
+char				**ft_appendtoarr(char **arr, char **app);
+char				**ft_getstring(char **str, char **arrstr);
+char				**ft_splitnotstr(char *str, char c);
 
-char	*ft_strjoinfree(char *begin, char *end, int num);
+char				*ft_strjoinfree(char *begin, char *end, int num);
 
-int		**ft_execfdpairs(int cmdct);
-char	*ft_execgetpathname(char *cmd);
-char	**ft_execargums(char *cmdarg);
-int		ft_execheredoc(char *delim);
-int		ft_execcloseall(int **fd, int pipect);
-int		ft_execchildproc(t_cmd *cmds, t_fullcmd	fullcmd, int i);
-int		ft_execparentproc(t_fullcmd	fullcmd, int childpid, int *i);
-int		ft_executer(t_cmd *fullcmds, int cmdct);
+int					**ft_execfdpairs(int cmdct);
+char				*ft_execgetpathname(char *cmd);
+char				**ft_execargums(char *cmdarg);
+int					ft_execheredoc(char *delim);
+int					ft_execcloseall(int **fd, int pipect);
+int					ft_execchildproc(t_cmd *cmds, t_fullcmd	fullcmd, int i, char **env);
+int					ft_execparentproc(t_fullcmd	fullcmd, int childpid, int *i);
+int					ft_executer(t_cmd *fullcmds, int cmdct, char **env);
 
-int		ft_min(int a, int b);
-char	*ft_pathname(char *cmd, char **paths);
+int					ft_min(int a, int b);
+char				*ft_pathname(char *cmd, char **paths);
 
-int		ft_arrlen(char **arr);
-int		ft_findchar(char *str, char c);
-void	ft_freearr(char **arr);
-void	ft_freearr2(char **arr, char **newarr);
-char	**ft_arrapp(char **arr, char *app);
-char	**ft_separatepipes(char *block);
-char	*ft_getname(char *line, int *len);
-char	*straddfree(char *str, char chr);
-char	*ft_get_cmdarg(char *line);
-t_cmd	*ft_putinstruct(char **blocksep);
-int		ft_parseandexec(char *line);
+int					ft_arrlen(char **arr);
+int					ft_findchar(char *str, char c);
+void				ft_freearr(char **arr);
+void				ft_freearr2(char **arr, char **newarr);
+char				**ft_arrapp(char **arr, char *app);
+char				**ft_separatepipes(char *block);
+char				*ft_getname(char *line, int *len);
+char				*straddfree(char *str, char chr);
+char				*ft_get_cmdarg(char *line);
+t_cmd				*ft_putinstruct(char **blocksep);
+int					ft_parseandexec(char *line, char **env);
 
-int		ft_echo(t_fullcmd fullcmd);
-int		ft_pwd(void);
-
+int					ft_echo(t_fullcmd fullcmd);
+int					ft_pwd(void);
 
 #endif
