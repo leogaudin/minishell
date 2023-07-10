@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_splitnotstr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 11:23:10 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/09 09:36:54 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/10 12:52:14 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
+#include "../../include/minishell.h"
 
 /* This function counts the number of arrays in a null termineted array of
  arrays. */
@@ -64,10 +63,12 @@ char	**ft_getstring(char **str, char **arrstr)
 	int		i;
 	char	*substr;
 	char	**subarr;
+	char	quote;
 
+	quote = **str;
 	(*str)++;
 	i = 0;
-	while ((*str)[i] != '\'' && (*str)[i] != '\"' && (*str)[i])
+	while ((*str)[i] != quote && (*str)[i])
 		i++;
 	substr = ft_substr((*str), 0, i);
 	subarr = malloc(2 * sizeof(char *));
@@ -77,7 +78,7 @@ char	**ft_getstring(char **str, char **arrstr)
 		subarr[1] = NULL;
 		arrstr = ft_appendtoarr(arrstr, subarr);
 	}
-	(*str) = (*str) + i;
+	(*str) = (*str) + i + 1;
 	return (arrstr);
 }
 
@@ -95,7 +96,9 @@ char	**ft_splitnotstr(char *str, char c)
 	while (*str)
 	{
 		i = 0;
-		while (str[i] != '\'' && str[i] != '\"' && str[i])
+		while ((str[i] != '\'' || (str[i] == '\'' && \
+				!ft_findchar(&str[i + 1], '\''))) && (str[i] != '\"' || \
+				(str[i] == '\"' && !ft_findchar(&str[i + 1], '\"'))) && str[i])
 			i++;
 		if (i != 0)
 		{
@@ -106,8 +109,6 @@ char	**ft_splitnotstr(char *str, char c)
 		}
 		if (*str)
 			arrstr = ft_getstring(&str, arrstr);
-		if (*str == '\'' || *str == '\"')
-			str++;
 	}
 	return (arrstr);
 }
