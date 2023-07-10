@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_tree.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 09:08:11 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/04 09:47:49 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/10 12:55:20 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	execute_operand_node(t_node *node)
 		exit(EXIT_FAILURE);
 	}
 	else if (pid == 0)
-		exit(execute_command(node->operand));
+		exit(ft_parseandexec(node->operand));
 	else
 	{
 		waitpid(pid, &status, 0);
