@@ -6,11 +6,12 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/09 13:08:05 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/10 12:56:29 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
+
 int	ft_arrlen(char **arr)
 {
 	int	i;
@@ -301,6 +302,7 @@ t_cmd	*ft_initcmds(char **blocksep, t_cmd *cmds)
 		cmds[i].cmdarg = ft_get_cmdarg(blocksep[i]);
 		if (!cmds[i].cmdarg)
 		{
+			//add some error for when there is no command!
 			j = 0;
 			while (j < i)
 				free(cmds[j++].cmdarg);
