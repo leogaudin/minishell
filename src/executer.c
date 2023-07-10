@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 11:52:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/10 12:55:47 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/10 16:31:47 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,30 +135,31 @@ int	ft_execcloseall(int **fd, int pipect)
 	return (0);
 }
 
-int	ft_execute(t_fullcmd fullcmd)
+int	ft_execute(t_fullcmd fullcmd, char **env)
 {
 	if (ft_isbuiltin(fullcmd.argums[0]))
 	{
-		if (execve(fullcmd.argums[0], fullcmd.argums, NULL) < 0)
+		if (execve(fullcmd.argums[0], fullcmd.argums, env) < 0)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	}
 	else if (!ft_strncmp(fullcmd.argums[0], "echo", ft_strlen(fullcmd.argums[0])))
 	{
-		if (ft_echo(fullcmd) < 0)
+		if (ft_echo(fullcmd))
 			return (-1);
 	}
 	else if (!ft_strncmp(fullcmd.argums[0], "pwd", ft_strlen(fullcmd.argums[0])))
 	{
-		if (ft_pwd() < 0)
+		if (ft_pwd())
 			return (-1);
 	}
 	return (0);
 }
 
-int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i)
+int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char **env)
 {
-	int fdin;
-	int fdout;
+	int	fdin;
+	int	fdout;
+	
 	if (cmds[i].rein.rein == 1)
 	{
 		fdin = open(cmds[i].rein.infile, O_RDONLY);
@@ -207,7 +208,7 @@ int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	}
 	ft_execcloseall(fullcmd.fds, fullcmd.cmdct);
-	if (ft_execute(fullcmd) < 0)
+	if (ft_execute(fullcmd, env) < 0)
 		return (-1);
 	return (0);
 }
@@ -226,7 +227,7 @@ int	ft_execparentproc(t_fullcmd	fullcmd, int childpid, int *i)
 	return (0);
 }
 
-int	ft_executer(t_cmd *cmds, int cmdct)
+int	ft_executer(t_cmd *cmds, int cmdct, char **env)
 {
 	int			childpid;
 	t_fullcmd	fullcmd;
@@ -255,7 +256,7 @@ int	ft_executer(t_cmd *cmds, int cmdct)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 		if (childpid == 0)
 		{
-			if (ft_execchildproc(fullcmd.cmds, fullcmd, i))
+			if (ft_execchildproc(fullcmd.cmds, fullcmd, i, env))
 				return (ft_frfds(fullcmd.fds, fullcmd.cmdct + 1), ft_freesplit(fullcmd.argums), -1);
 		}
 		else
