@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_getpathname.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:37:27 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/09 09:36:54 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/10 12:52:18 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 
 /* This function returns the minimum value of the two values given to it as
@@ -28,7 +28,7 @@ int	ft_min(int a, int b)
  permissions to execute it. */
 char	*ft_pathname(char *cmd, char **paths)
 {
-	int		i;
+	int		i;	
 	char	*cmdpath;
 	int		acc;
 
@@ -36,6 +36,9 @@ char	*ft_pathname(char *cmd, char **paths)
 	acc = ft_min(access(cmd, F_OK), access(cmd, X_OK));
 	if (acc == 0)
 		return (ft_strdup(cmd));
+	acc = ft_min(access(cmd + 1, F_OK), access(cmd + 1, X_OK));
+	if (acc == 0)
+		return (ft_strdup(cmd + 1));
 	while (paths[i] && acc != 0)
 	{
 		cmdpath = ft_strjoin(paths[i], cmd);
@@ -48,32 +51,3 @@ char	*ft_pathname(char *cmd, char **paths)
 	}
 	return (NULL);
 }
-
-/* In this function, we first store all the available paths in which we can
- look for commands in the paths variable. We obtain them from the environmemt
- variable PATH. If the command cannot be found, we print an error and set the
- error variable to 1. We also free the allocated memory that we no longer
- need. */
-/* char	*ft_getpathname(char *cmd, t_args *args, char **envp)
-{
-	int		i;
-	char	**paths;
-	char	*cmdpath;
-
-	i = 0;
-	while (strncmp(envp[i], "PATH=", 5) != 0)
-		i++;
-	cmd = ft_strjoinfree("/", cmd, 2);
-	paths = ft_split(envp[i] + 5, ':');
-	cmdpath = ft_pathname(cmd, paths);
-	if (cmdpath == NULL)
-	{
-		ft_printf("./pipex: %s: command not found\n", cmd + 1);
-		free (cmd);
-		ft_freesplit(paths);
-		return ((*args).error = 1, strdup(""));
-	}
-	free (cmd);
-	ft_freesplit(paths);
-	return (cmdpath);
-} */
