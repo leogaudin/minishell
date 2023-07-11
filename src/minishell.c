@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/11 08:03:35 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/11 11:06:39 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int main(int argc, char **argv, char **env)
 	t_node	*root;
 	int		exit_status;
 
-	argc = 0;
-	argv = NULL;
-	env = ft_arrdup(env);//free env at end
+	(void)argc;
+	(void)argv;
+	env = ft_arrdup(env);
 	while (1)
 	{
 		line = readline("minishell> ");
@@ -72,4 +72,5 @@ int main(int argc, char **argv, char **env)
 			exit_status = execute_node(root, env);
 		}
 	}
+	return (exit_status);
 }

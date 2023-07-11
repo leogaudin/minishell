@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 11:52:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/11 10:40:26 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/11 11:06:04 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ char	*ft_execgetpathname(char *cmd)
 	int		off;
 
 	i = 0;
+	(void)i;
 	if (ft_findchar(cmd, '/') == 0)
 		cmd = ft_strjoinfree("/", cmd, 2);
 	paths = ft_split(getenv("PATH"), ':');
@@ -149,7 +150,7 @@ int	ft_execute(t_fullcmd fullcmd, char **env)
 	}
 	else if (!ft_strncmp(fullcmd.argums[0], "pwd", ft_strlen(fullcmd.argums[0])))
 	{
-		if (ft_pwd(env))
+		if (ft_pwd())
 			return (-1);
 	}
 	return (0);
@@ -159,7 +160,7 @@ int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char **env)
 {
 	int	fdin;
 	int	fdout;
-	
+
 	if (cmds[i].rein.rein == 1)
 	{
 		fdin = open(cmds[i].rein.infile, O_RDONLY);
