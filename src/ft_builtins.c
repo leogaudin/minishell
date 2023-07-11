@@ -6,11 +6,31 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/10 17:01:16 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/11 10:59:25 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+char	*ft_getenv(char *var, char **env)
+{
+	int		i;
+	char	*value;
+
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(var, env[i], ft_strlen(var)) == 0 && env[i][ft_strlen(var)] == '=')
+		{
+			value = ft_strdup(&env[i][ft_strlen(var) + 1]);
+			if (!value)
+				return (ft_putendl_fd(strerror(errno), STDERR_FILENO), NULL);
+			return (value);
+		}
+		i++;
+	}
+	return (ft_strdup(""));//for now I return an empty string when it doesn't find the variable to diff between malloc error and not finding the var.
+}
 
 int	ft_echo(t_fullcmd fullcmd)
 {
@@ -43,19 +63,14 @@ int	ft_echo(t_fullcmd fullcmd)
 	exit(0);
 }
 
-int	ft_pwd(void)
+int	ft_pwd(char **env)
 {
 	char	*wd;
 
-	wd = getenv("PWD");
+	wd = ft_getenv("PWD", env);
 	if (write(STDOUT_FILENO, wd, ft_strlen(wd)) < 0)
 		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	if (write(STDOUT_FILENO, "\n", 1) < 0)
 		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	exit(0);
 }
-
-/* int ft_cd(t_fullcmd fullcmd)
-{
-
-} */
