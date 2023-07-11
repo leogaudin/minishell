@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/10 16:23:56 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/11 08:03:35 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int main(int argc, char **argv, char **env)
 
 	argc = 0;
 	argv = NULL;
-	env = ft_arrdup(env);
+	env = ft_arrdup(env);//free env at end
 	while (1)
 	{
 		line = readline("minishell> ");
