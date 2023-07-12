@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/12 12:38:32 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/12 12:43:35 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,4 +215,5 @@ int	ft_env(t_fullcmd fullcmd, char ***env)
 		printf("%s\n", (*env)[i]);
 		i++;
 	}
-	ret
+	return (0);
+}
