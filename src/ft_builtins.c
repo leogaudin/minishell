@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/12 12:43:35 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/12 17:08:45 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,30 @@ int	ft_pwd(char **env)
 	if (write(STDOUT_FILENO, "\n", 1) < 0)
 		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	return (0);
+}
+int ft_cd(t_fullcmd fullcmd)
+{
+	char	*path;
+
+	path = NULL;
+	if (fullcmd.argums[1] == NULL)
+		path = getenv("HOME");
+	else if (ft_strcmp(fullcmd.argums[1], "-") == 0)
+		path = getenv("OLDPWD");
+	else
+		path = ft_strjoin(getcwd(NULL, 1000), fullcmd.argums[1]);
+	if (path == NULL)
+	{
+		ft_printf("cd: HOME not set\n");
+		return (1);
+	}
+	if (chdir(path) == -1)
+	{
+		ft_printf("cd: %s: %s\n", strerror(errno), path);
+		return (1);
+	}
+	printf("path = %s\n", path);
+	exit(0);
 }
 
 int	ft_existenv(char *var, char **env)
