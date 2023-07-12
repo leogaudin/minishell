@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/12 11:48:27 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/12 17:43:31 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_node
 	struct s_node	*right;
 }					t_node;
 
-t_node				*create_node(char *operator, char *operand);
+t_node				*create_node(char *operator, char * operand);
 void				destroy_node(t_node *t_node);
 t_node				*create_operator_node(char *operator);
 t_node				*create_operand_node(char *operand);
@@ -71,7 +71,8 @@ void				print_ast(t_node *root, int indent);
 // execute_tree.c
 int					execute_command(const char *command);
 int					execute_node(t_node *node, char ***env);
-int					execute_operator_node(t_node *node, int left_status, char ***env);
+int					execute_operator_node(t_node *node, int left_status,
+						char ***env);
 int					execute_operand_node(t_node *node, char ***env);
 
 /**
@@ -84,10 +85,10 @@ int					execute_operand_node(t_node *node, char ***env);
  */
 typedef struct s_reout
 {
-	int		reout;
-	int		reoutapp;
-	char	*outfile;
-}				t_reout;
+	int				reout;
+	int				reoutapp;
+	char			*outfile;
+}					t_reout;
 
 /**
  * Structure that holds the information about redirections.
@@ -100,11 +101,11 @@ typedef struct s_reout
  */
 typedef struct s_rein
 {
-	int		rein;
-	int		herein;
-	char	*heredel;
-	char	*infile;
-}				t_rein;
+	int				rein;
+	int				herein;
+	char			*heredel;
+	char			*infile;
+}					t_rein;
 
 /**
  * Structure that holds the command with it arguments and a redirection
@@ -116,19 +117,19 @@ typedef struct s_rein
  */
 typedef struct s_cmd
 {
-	t_rein	rein;
-	t_reout	reout;
-	char	*cmdarg;
+	t_rein			rein;
+	t_reout			reout;
+	char			*cmdarg;
 
-}			t_cmd;
+}					t_cmd;
 
 typedef struct s_fullcmd
 {
-	t_cmd	*cmds;
-	int		cmdct;
-	char	**argums;
-	int		**fds;
-}			t_fullcmd;
+	t_cmd			*cmds;
+	int				cmdct;
+	char			**argums;
+	int				**fds;
+}					t_fullcmd;
 
 void				ft_freesplit(char **arrstr);
 void				ft_frfds(int **fds, int i);
@@ -145,8 +146,9 @@ char				*ft_execgetpathname(char *cmd);
 char				**ft_execargums(char *cmdarg);
 int					ft_execheredoc(char *delim);
 int					ft_execcloseall(int **fd, int pipect);
-int					ft_execchildproc(t_cmd *cmds, t_fullcmd	fullcmd, int i, char ***env);
-int					ft_execparentproc(t_fullcmd	fullcmd, int childpid, int *i);
+int					ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i,
+						char ***env);
+int					ft_execparentproc(t_fullcmd fullcmd, int childpid, int *i);
 int					ft_executer(t_cmd *fullcmds, int cmdct, char ***env);
 
 int					ft_min(int a, int b);
@@ -167,8 +169,9 @@ int					ft_parseandexec(char *line, char ***env);
 int					ft_echo(t_fullcmd fullcmd);
 int					ft_pwd(char **env);
 
-int	ft_export(t_fullcmd fullcmd, char ***env);
-int	ft_env(t_fullcmd fullcmd, char ***env);
-int	ft_unset(t_fullcmd fullcmd, char ***env);
+int					ft_export(t_fullcmd fullcmd, char ***env);
+int					ft_env(t_fullcmd fullcmd, char ***env);
+int					ft_unset(t_fullcmd fullcmd, char ***env);
+int					ft_cd(t_fullcmd fullcmd, char ***env);
 
 #endif

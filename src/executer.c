@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 11:52:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/12 12:34:27 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/12 17:43:46 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,11 @@ int	ft_execute(t_cmd *cmds, t_fullcmd fullcmd, int i, char ***env)
 	else if (!ft_strncmp(fullcmd.argums[0], "unset", ft_strlen(fullcmd.argums[0])))
 	{
 		if (ft_unset(fullcmd, env))
+			return (-1);
+	}
+	else if (!ft_strncmp(fullcmd.argums[0], "cd", ft_strlen(fullcmd.argums[0])))
+	{
+		if (ft_cd(fullcmd, env))
 			return (-1);
 	}
 

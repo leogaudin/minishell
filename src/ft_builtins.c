@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/12 17:08:45 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/12 17:43:11 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	ft_pwd(char **env)
 		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	return (0);
 }
-int ft_cd(t_fullcmd fullcmd)
+int ft_cd(t_fullcmd fullcmd, char ***env)
 {
 	char	*path;
 
