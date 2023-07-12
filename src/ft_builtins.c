@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/12 17:43:11 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/12 17:44:32 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int ft_cd(t_fullcmd fullcmd, char ***env)
 	char	*path;
 
 	path = NULL;
+	(void)env;
 	if (fullcmd.argums[1] == NULL)
 		path = getenv("HOME");
 	else if (ft_strcmp(fullcmd.argums[1], "-") == 0)
