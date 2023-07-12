@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 11:52:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/11 11:06:04 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/12 12:34:27 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,30 +136,15 @@ int	ft_execcloseall(int **fd, int pipect)
 	return (0);
 }
 
-int	ft_execute(t_fullcmd fullcmd, char **env)
+int	ft_execute(t_cmd *cmds, t_fullcmd fullcmd, int i, char ***env)
 {
-	if (ft_isbuiltin(fullcmd.argums[0]))
-	{
-		if (execve(fullcmd.argums[0], fullcmd.argums, env) < 0)
-			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
-	}
-	else if (!ft_strncmp(fullcmd.argums[0], "echo", ft_strlen(fullcmd.argums[0])))
-	{
-		if (ft_echo(fullcmd))
-			return (-1);
-	}
-	else if (!ft_strncmp(fullcmd.argums[0], "pwd", ft_strlen(fullcmd.argums[0])))
-	{
-		if (ft_pwd())
-			return (-1);
-	}
-	return (0);
-}
-
-int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char **env)
-{
+	int	stdincpy;
+	int	stdoutcpy;
 	int	fdin;
 	int	fdout;
+
+	stdincpy = dup(STDIN_FILENO);
+	stdoutcpy = dup(STDOUT_FILENO);
 
 	if (cmds[i].rein.rein == 1)
 	{
@@ -168,6 +153,7 @@ int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char **env)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 		if (dup2(fdin, STDIN_FILENO) < 0)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		close(fdin);
 	}
 	else if (cmds[i].rein.herein == 1)
 	{
@@ -176,6 +162,7 @@ int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char **env)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 		if (dup2(fdin, STDIN_FILENO) < 0)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		close(fdin);
 	}
 	else if (i > 0)
 	{
@@ -194,6 +181,7 @@ int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char **env)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 		if (dup2(fdout, STDOUT_FILENO) < 0)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		close(fdout);
 	}
 	else if (cmds[i].reout.reoutapp == 1)
 	{
@@ -202,6 +190,7 @@ int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char **env)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 		if (dup2(fdout, STDOUT_FILENO) < 0)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		close(fdout);
 	}
 	else if (i < fullcmd.cmdct - 1)
 	{
@@ -209,8 +198,103 @@ int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char **env)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	}
 	ft_execcloseall(fullcmd.fds, fullcmd.cmdct);
-	if (ft_execute(fullcmd, env) < 0)
-		return (-1);
+
+	if (!ft_strncmp(fullcmd.argums[0], "echo", ft_strlen(fullcmd.argums[0])))
+	{
+		if (ft_echo(fullcmd))
+			return (-1);
+	}
+	else if (!ft_strncmp(fullcmd.argums[0], "pwd", ft_strlen(fullcmd.argums[0])))
+	{
+		if (ft_pwd(*env))
+			return (-1);
+	}
+	else if (!ft_strncmp(fullcmd.argums[0], "export", ft_strlen(fullcmd.argums[0])))
+	{
+		if (ft_export(fullcmd, env))
+			return (-1);
+	}
+	else if (!ft_strncmp(fullcmd.argums[0], "env", ft_strlen(fullcmd.argums[0])))
+	{
+		if (ft_env(fullcmd, env))
+			return (-1);
+	}
+	else if (!ft_strncmp(fullcmd.argums[0], "unset", ft_strlen(fullcmd.argums[0])))
+	{
+		if (ft_unset(fullcmd, env))
+			return (-1);
+	}
+
+	dup2(stdincpy, STDIN_FILENO);
+	dup2(stdoutcpy, STDOUT_FILENO);
+	close(stdincpy);
+	close(stdoutcpy);
+
+	return (0);
+}
+
+int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, char ***env)
+{
+	int	fdin;
+	int	fdout;
+
+	if (cmds[i].rein.rein == 1)
+	{
+		fdin = open(cmds[i].rein.infile, O_RDONLY);
+		if (fdin < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		if (dup2(fdin, STDIN_FILENO) < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		close(fdin);
+	}
+	else if (cmds[i].rein.herein == 1)
+	{
+		fdin = ft_execheredoc(cmds[i].rein.heredel);
+		if (fdin < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		if (dup2(fdin, STDIN_FILENO) < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		close(fdin);
+	}
+	else if (i > 0)
+	{
+		if (dup2(fullcmd.fds[i][0], STDIN_FILENO) < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+	}
+	if (cmds[i].reout.reout == 1)
+	{
+		if (access(cmds[i].reout.outfile, F_OK) == 0)
+		{
+			if (unlink(cmds[i].reout.outfile) < 0)
+				return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		}
+		fdout = open(cmds[i].reout.outfile, O_WRONLY | O_CREAT, 0644);
+		if (fdout < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		if (dup2(fdout, STDOUT_FILENO) < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		close(fdout);
+	}
+	else if (cmds[i].reout.reoutapp == 1)
+	{
+		fdout = open(cmds[i].reout.outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		if (fdout < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		if (dup2(fdout, STDOUT_FILENO) < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		close(fdout);
+	}
+	else if (i < fullcmd.cmdct - 1)
+	{
+		if (dup2(fullcmd.fds[i + 1][1], STDOUT_FILENO) < 0)
+			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+	}
+	ft_execcloseall(fullcmd.fds, fullcmd.cmdct);
+	if (execve(fullcmd.argums[0], fullcmd.argums, *env) < 0)
+	{
+		printf("something went wrong\n");
+		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+	}
 	return (0);
 }
 
@@ -228,7 +312,7 @@ int	ft_execparentproc(t_fullcmd	fullcmd, int childpid, int *i)
 	return (0);
 }
 
-int	ft_executer(t_cmd *cmds, int cmdct, char **env)
+int	ft_executer(t_cmd *cmds, int cmdct, char ***env)
 {
 	int			childpid;
 	t_fullcmd	fullcmd;
@@ -252,18 +336,32 @@ int	ft_executer(t_cmd *cmds, int cmdct, char **env)
 	while (i < cmdct)
 	{
 		fullcmd.argums = ft_execargums(fullcmd.cmds[i].cmdarg);
-		childpid = fork();
-		if (childpid == -1)
-			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
-		if (childpid == 0)
+		if (ft_isbuiltin(fullcmd.argums[0]))
 		{
-			if (ft_execchildproc(fullcmd.cmds, fullcmd, i, env))
-				return (ft_frfds(fullcmd.fds, fullcmd.cmdct + 1), ft_freesplit(fullcmd.argums), -1);
+			childpid = fork();
+			if (childpid == -1)
+				return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+			if (childpid == 0)
+			{
+				if (ft_execchildproc(fullcmd.cmds, fullcmd, i, env))
+				{
+					ft_execcloseall(fullcmd.fds, fullcmd.cmdct);
+					return (ft_frfds(fullcmd.fds, fullcmd.cmdct + 1), ft_freesplit(fullcmd.argums), -1);
+				}
+			}
+			else
+			{
+				if (ft_execparentproc(fullcmd, childpid, &i))
+				{
+					ft_execcloseall(fullcmd.fds, fullcmd.cmdct);
+					return (ft_frfds(fullcmd.fds, cmdct + 1), -1);
+				}
+			}
 		}
 		else
 		{
-			if (ft_execparentproc(fullcmd, childpid, &i))
-				return (ft_frfds(fullcmd.fds, cmdct + 1), -1);
+			ft_execute(fullcmd.cmds, fullcmd, i, env);
+			i++;
 		}
 	}
 	ft_frfds(fullcmd.fds, fullcmd.cmdct + 1);

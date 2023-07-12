@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/11 11:06:39 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/12 10:22:03 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int main(int argc, char **argv, char **env)
 		{
 			add_history(line);
 			root = generate_node_from_command(line);
-			exit_status = execute_node(root, env);
+			exit_status = execute_node(root, &env);
 		}
 	}
 	return (exit_status);

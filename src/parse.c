@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/10 16:24:50 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/12 10:25:10 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -425,7 +425,6 @@ t_cmd *ft_putinstruct(char **blocksep)
 						j++;
 					len = 0;
 					name = ft_getname(&blocksep[i][j], &len);
-					printf("name is %s", name);
 					if (!name)
 						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].reout.outfile = name;
@@ -440,7 +439,7 @@ t_cmd *ft_putinstruct(char **blocksep)
 	return (cmds);
 }
 
-int	ft_parseandexec(char *line, char **env)
+int	ft_parseandexec(char *line, char ***env)
 {
 	char	**res;
 	t_cmd	*cmds;

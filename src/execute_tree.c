@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 09:08:11 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/10 16:14:40 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/12 10:32:41 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	execute_command(const char *command)
  * @param    left_status The exit status of the left child node.
  * @return   int         The exit status of the executed node.
  */
-int	execute_operator_node(t_node *node, int left_status, char **env)
+int	execute_operator_node(t_node *node, int left_status, char ***env)
 {
 	if (ft_strcmp(node->operator, "&&") == 0 && left_status == 0)
 		return (execute_node(node->right, env));
@@ -74,7 +74,7 @@ int	execute_operator_node(t_node *node, int left_status, char **env)
  * @param    node      The operand node to execute.
  * @return   int       The exit status of the executed node.
  */
-int	execute_operand_node(t_node *node, char **env)
+/* int	execute_operand_node(t_node *node, char ***env)
 {
 	pid_t	pid;
 	int		status;
@@ -95,6 +95,13 @@ int	execute_operand_node(t_node *node, char **env)
 		else
 			return (1);
 	}
+} */
+
+int	execute_operand_node(t_node *node, char ***env)
+{
+	if (ft_parseandexec(node->operand, env))
+		return (-1);
+	return (1);
 }
 
 /**
@@ -109,7 +116,7 @@ int	execute_operand_node(t_node *node, char **env)
  * @param    node      The node to execute.
  * @return   int       The exit status of the executed node.
  */
-int	execute_node(t_node *node, char **env)
+int	execute_node(t_node *node, char ***env)
 {
 	int	left_status;
 
