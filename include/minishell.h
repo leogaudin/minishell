@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/12 17:43:31 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/16 14:56:00 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,5 +173,6 @@ int					ft_export(t_fullcmd fullcmd, char ***env);
 int					ft_env(t_fullcmd fullcmd, char ***env);
 int					ft_unset(t_fullcmd fullcmd, char ***env);
 int					ft_cd(t_fullcmd fullcmd, char ***env);
+void				ft_exit(t_fullcmd fullcmd, char ***env);
 
 #endif

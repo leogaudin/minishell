@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 11:52:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/12 17:43:46 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/16 15:09:48 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,8 @@ int	ft_execute(t_cmd *cmds, t_fullcmd fullcmd, int i, char ***env)
 		if (ft_cd(fullcmd, env))
 			return (-1);
 	}
+	else if (!ft_strncmp(fullcmd.argums[0], "exit", ft_strlen(fullcmd.argums[0])))
+		ft_exit(fullcmd, env);
 
 	dup2(stdincpy, STDIN_FILENO);
 	dup2(stdoutcpy, STDOUT_FILENO);

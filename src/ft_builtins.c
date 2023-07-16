@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/16 10:13:24 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/16 15:08:13 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,4 +270,29 @@ int ft_cd(t_fullcmd fullcmd, char ***env)
 	path = ft_strdup(getcwd(NULL, 0));
 	update_pwd(path, oldpath, env);
 	return (free(path), free(oldpath), free(home), 0);
+}
+
+void ft_exit(t_fullcmd fullcmd, char ***env)
+{
+	int i;
+
+	(void)env;
+	i = 0;
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	if (fullcmd.argums[1] != NULL && fullcmd.argums[2] != NULL)
+		return (ft_putendl_fd("exit: too many arguments", STDERR_FILENO), (void)0);
+	if (fullcmd.argums[1] != NULL)
+	{
+		while (fullcmd.argums[1][i])
+		{
+			if (ft_isdigit(fullcmd.argums[1][i]) == 0)
+			{
+				ft_putendl_fd("exit: numeric argument required", STDERR_FILENO);
+				exit(255);
+			}
+			i++;
+		}
+		exit(ft_atoi(fullcmd.argums[1]));
+	}
+	exit(0);
 }
