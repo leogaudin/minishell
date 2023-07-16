@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/12 17:44:32 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/16 10:13:24 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,31 +73,6 @@ int	ft_pwd(char **env)
 	if (write(STDOUT_FILENO, "\n", 1) < 0)
 		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	return (0);
-}
-int ft_cd(t_fullcmd fullcmd, char ***env)
-{
-	char	*path;
-
-	path = NULL;
-	(void)env;
-	if (fullcmd.argums[1] == NULL)
-		path = getenv("HOME");
-	else if (ft_strcmp(fullcmd.argums[1], "-") == 0)
-		path = getenv("OLDPWD");
-	else
-		path = ft_strjoin(getcwd(NULL, 1000), fullcmd.argums[1]);
-	if (path == NULL)
-	{
-		ft_printf("cd: HOME not set\n");
-		return (1);
-	}
-	if (chdir(path) == -1)
-	{
-		ft_printf("cd: %s: %s\n", strerror(errno), path);
-		return (1);
-	}
-	printf("path = %s\n", path);
-	exit(0);
 }
 
 int	ft_existenv(char *var, char **env)
@@ -241,4 +216,58 @@ int	ft_env(t_fullcmd fullcmd, char ***env)
 		i++;
 	}
 	return (0);
+}
+
+
+void determine_path(char **path, char *home, t_fullcmd fullcmd, char ***env)
+{
+	if (fullcmd.argums[1] == NULL || !ft_strcmp(fullcmd.argums[1], "~"))
+		*path = ft_strdup(home);
+	else if (ft_strncmp(fullcmd.argums[1], "~/", 2) == 0)
+		*path = ft_strjoin(home, fullcmd.argums[1] + 1);
+	else if (ft_strcmp(fullcmd.argums[1], "-") == 0)
+	{
+		*path = ft_getenv("OLDPWD", *env);
+		ft_printf("%s\n", *path);
+	}
+	else
+		*path = ft_strdup(fullcmd.argums[1]);
+}
+
+int	change_path(char *path, t_fullcmd fullcmd)
+{
+	if (chdir(path) == -1)
+	{
+		ft_printf("cd: %s: %s\n", strerror(errno), fullcmd.argums[1]);
+		free(path);
+		return (1);
+	}
+	return (0);
+}
+
+void	update_pwd(char *path, char *oldpath, char ***env)
+{
+	ft_arrremove(*env, ft_existenv("PWD", *env));
+	ft_arrremove(*env, ft_existenv("OLDPWD", *env));
+	ft_parseandexec(ft_strjoin("export OLDPWD=", oldpath), env);
+	ft_parseandexec(ft_strjoin("export PWD=", path), env);
+}
+
+int ft_cd(t_fullcmd fullcmd, char ***env)
+{
+	char	*path;
+	char	*oldpath;
+	char	*home;
+
+	path = NULL;
+	home = ft_getenv("HOME", *env);
+	oldpath = ft_strdup(getcwd(NULL, 0));
+	determine_path(&path, home, fullcmd, env);
+	if (path == NULL)
+		return (ft_printf("cd: HOME not set\n"), 1);
+	if (change_path(path, fullcmd))
+		return (1);
+	path = ft_strdup(getcwd(NULL, 0));
+	update_pwd(path, oldpath, env);
+	return (free(path), free(oldpath), free(home), 0);
 }
