@@ -8,6 +8,7 @@ CFLAGS = -Wall -Werror -Wextra
 LIBFT_PATH = include/libft
 # Add any other static library in the same fashion - 1
 
+# TODO: reorganize the Makefile and the folder structure
 # INCLUDE: .h files or .a library folders
 # SRC: .c files
 SRC_DIR = src
