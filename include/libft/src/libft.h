@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:50:27 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/09 16:33:32 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/13 15:43:23 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,6 @@ int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strndup(char *str, int n);
 char				*ft_get_bef_char(char *str, char c);
 char				*ft_get_aft_char(char *str, char c);
+char				*ft_get_bef_char_rev(char *str, char c);
 
 #endif
