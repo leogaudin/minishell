@@ -36,7 +36,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
 	@$(CC) $(CFLAGS) $(LIBS) -o $@ $^
-	@echo "$(GREEN)$(NAME) created.$(RESET)"
+	@echo "$(GREEN)+ $(NAME)$(RESET)"
 # Add any other static library in the same fashion as $(LIBFT) AND -I$(LIBFT_PATH) - 3
 
 
@@ -57,7 +57,7 @@ clean:
 fclean: clean
 	@$(MAKE) -C $(LIBFT_PATH) fclean
 	@$(RM) $(NAME)
-	@echo "$(RED)$(NAME) deleted.$(RESET)"
+	@echo "$(RED)- $(NAME)$(RESET)"
 # Add any other static library in the same fashion - 7
 
 re: fclean all
