@@ -12,7 +12,15 @@ LIBFT_PATH = include/libft
 # SRC: .c files
 SRC_DIR = src
 OBJ_DIR = obj
-INCLUDE_DIR = include
+INCLUDE_DIRS = include -I $(LIBFT_PATH) -I /opt/homebrew/Cellar/readline/8.2.1/include
+LIBS =  -L$(LIBFT_PATH) -lreadline
+
+SYS	= $(shell uname -s)
+
+ifeq ($(SYS), Darwin)
+INCLUDE_DIRS +=	-I /opt/vagrant/embedded/include
+LIBS	+= -L/opt/vagrant/embedded/lib
+endif
 
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
@@ -27,14 +35,14 @@ NAME = minishell
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
-	@$(CC) $(CFLAGS) -lreadline -o $@ $^ -L$(LIBFT_PATH)
+	@$(CC) $(CFLAGS) $(LIBS) -o $@ $^
 	@echo "$(GREEN)$(NAME) created.$(RESET)"
 # Add any other static library in the same fashion as $(LIBFT) AND -I$(LIBFT_PATH) - 3
 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -I$(LIBFT_PATH) -c -o $@ $<
+	@$(CC) $(CFLAGS) -I $(INCLUDE_DIRS) -c -o $@ $<
 # Add any other static library in the same fashion as -I$(LIBFT_PATH) - 4
 
 $(LIBFT):
