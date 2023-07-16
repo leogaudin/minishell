@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:50:27 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/13 15:43:23 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/16 20:14:32 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # include <stdarg.h>
+# include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
 
@@ -99,5 +100,8 @@ char				*ft_strndup(char *str, int n);
 char				*ft_get_bef_char(char *str, char c);
 char				*ft_get_aft_char(char *str, char c);
 char				*ft_get_bef_char_rev(char *str, char c);
+void				*ft_malloc_error(void);
+bool				ft_isspace(char c);
+char				*ft_strip_quotes(char *str);
 
 #endif
