@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/12 10:22:03 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/16 14:48:02 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,25 @@ char	**ft_arrdup(char **arr)
 	return (new);
 }
 
+char *ft_prompt(void)
+{
+	return ("\033[0;32mminishell> \033[0m");
+}
+
+void sigint_handler(int sig)
+{
+	(void)sig;
+	ft_putchar_fd('\n', 1);
+    rl_replace_line("", 0);
+    rl_on_new_line();
+    rl_redisplay();
+}
+
+// void check_leaks(void)
+// {
+// 	system("leaks minishell");
+// }
+
 int main(int argc, char **argv, char **env)
 {
 	char	*line;
@@ -61,10 +80,14 @@ int main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	// atexit(check_leaks);
 	env = ft_arrdup(env);
+	signal(SIGINT, sigint_handler);
 	while (1)
 	{
-		line = readline("minishell> ");
+		line = readline(ft_prompt());
+		if (!line)
+			exit(0);
 		if (line && *line)
 		{
 			add_history(line);
