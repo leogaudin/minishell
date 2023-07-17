@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/17 15:57:38 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/17 16:09:14 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @param    operand   The operand of the node.
  * @return   t_node*   The newly created node.
  */
-t_node	*create_node(char *operator, char * operand)
+t_node	*create_node(char *operator, char *operand)
 {
 	t_node	*new_node;
 

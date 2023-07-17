@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/16 14:56:00 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/17 16:16:23 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@
 /* tgetent tgetflag tgetnum tgetstr tgoto tputs */
 # include <term.h>
 
+int	g_exit_code = 0;
+
 // tree.c
 typedef struct s_node
 {
@@ -59,7 +61,7 @@ typedef struct s_node
 	struct s_node	*right;
 }					t_node;
 
-t_node				*create_node(char *operator, char * operand);
+t_node				*create_node(char *operator, char *operand);
 void				destroy_node(t_node *t_node);
 t_node				*create_operator_node(char *operator);
 t_node				*create_operand_node(char *operand);
