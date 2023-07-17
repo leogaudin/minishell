@@ -10,11 +10,19 @@
 	<img src="https://img.shields.io/badge/unknown%2F100-important?logo=42&logoColor=fff" />
 </div>
 
+<h2>⚠️ This project is currently in progress and is neither finished nor tested</h2>
+<h2>⚠️ Remember that even if there is a nice README with cool emojis, this project has still be made by students and is probably far from perfect</h2>
+
 ## 📖 Table of Contents
 <!--ts-->
 * [⚙️ Usage](#usage)
 	* [😫 Troubleshooting](#troubleshooting)
 * [💯 Mandatory part](#mandatory-part)
+	* [💬 Quotes](#quotes)
+	* [📈 Expanding variables](#expanding-variables)
+	* [🔀 Redirections](#redirections)
+	* [🪈 Pipes](#pipes)
+	* [🚪 Exit statuses](#exit-statuses)
 	* [🛠️ Builtins](#builtins)
 		* [`echo`](#echo)
 		* [`cd`](#cd)
@@ -65,6 +73,16 @@ ln /opt/homebrew/Cellar/readline/8.2.1/lib/libreadline.8.dylib /usr/local/lib/li
 ```
 
 ## Mandatory part
+
+### Quotes
+
+### Expanding variables
+
+### Redirections
+
+### Pipes
+
+### Exit statuses
 
 ### Builtins
 
