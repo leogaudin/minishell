@@ -13,6 +13,20 @@
 <h2>⚠️ This project is currently in progress and is neither finished nor tested</h2>
 <h2>⚠️ Remember that even if there is a nice README with cool emojis, this project has been made by students and is probably far from perfect</h2>
 
+<h2>💧 Leaks (dev only)</h2>
+
+* dev_utils.c: ❓
+* execute_tree.c: ✅
+* executer.c: ❓
+* ft_builtins.c: ❓
+* ft_freefuncs.c: ❓
+* ft_getpathname.c: ❓
+* ft_splitnotstr.c: ❓
+* ft_strjoinfree.c: ❓
+* minishell.c: ❓
+* parse.c: ❓
+* tree.c: ✅
+
 ## 📖 Table of Contents
 <!--ts-->
 * [⚙️ Usage](#usage)
