@@ -28,6 +28,7 @@
 		* [`Ctrl-D`](#ctrl-d)
 * [🌟 Bonus part](#bonus-part)
 	* [🌳 `&&` and `||`](#operators)
+	* [✴ Wildcard expansion](#wildcard-expansion)
 * [🙇🏻 Credits](#credits)
 <!--te-->
 
@@ -224,7 +225,7 @@ In our case, we will use an AST to represent the commands and operators entered 
 
 By traversing the AST, we can execute the commands in the right order, and we can also handle the `&&` and `||` operators' particularities properly.
 
-### `*` wildcard expansion
+### Wildcard expansion
 
 ## Credits
 
