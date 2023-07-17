@@ -13,6 +13,7 @@
 ## 📖 Table of Contents
 <!--ts-->
 * [⚙️ Usage](#usage)
+	* [😫 Troubleshooting](#troubleshooting)
 * [💯 Mandatory part](#mandatory-part)
 	* [🛠️ Builtins](#builtins)
 		* [`echo`](#echo)
@@ -36,6 +37,30 @@
 git clone https://github.com/leogaudin/minishell.git
 cd minishell
 make && ./minishell
+```
+
+### Troubleshooting
+
+If you have an error when running `make`, it is probably because you do not have the `readline` library installed on your computer, or that it is not well linked.
+
+There are a few ways to fix this, but ours was:
+
+1. Install vagrant with brew
+
+```bash
+brew install vagrant
+```
+
+2. Install the `readline` library with brew
+
+```bash
+brew install readline
+```
+
+3. Create a symlink to the library
+
+```bash
+ln /opt/homebrew/Cellar/readline/8.2.1/lib/libreadline.8.dylib /usr/local/lib/libreadline.8.dylib
 ```
 
 ## Mandatory part
