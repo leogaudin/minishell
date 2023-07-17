@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/04 09:19:47 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/17 15:57:38 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,14 @@
  * @param    operand   The operand of the node.
  * @return   t_node*   The newly created node.
  */
-t_node	*create_node(char *operator, char *operand)
+t_node	*create_node(char *operator, char * operand)
 {
 	t_node	*new_node;
 
 	new_node = (t_node *)malloc(sizeof(t_node));
 	if (new_node == NULL)
-	{
-		ft_putendl_fd("Memory allocation failed\n", STDERR_FILENO);
-		exit(EXIT_FAILURE);
-	}
-	new_node->operator = operator;
+		return (ft_malloc_error());
+	new_node->operator= operator;
 	new_node->operand = operand;
 	new_node->left = NULL;
 	new_node->right = NULL;
@@ -68,6 +65,10 @@ void	destroy_node(t_node *t_node)
 {
 	if (t_node == NULL)
 		return ;
+	if (t_node->operand)
+		free(t_node->operand);
+	if (t_node->operator)
+		free(t_node->operator);
 	if (t_node->left)
 		destroy_node(t_node->left);
 	if (t_node->right)
@@ -105,12 +106,15 @@ t_node	*generate_node_from_command(const char *command)
 	if (token)
 	{
 		commands = ft_split_str_once(command, token);
-		root = create_operator_node(token);
+		root = create_operator_node(ft_strdup(token));
 		root->left = generate_node_from_command(commands[0]);
 		root->right = generate_node_from_command(commands[1]);
 	}
 	else
 		root = create_operand_node((char *)command);
-	// TODO: LEAKS - free commands[] without erasing them for after
+	if (ft_strnstr(command, "||", ft_strlen(command)) || ft_strnstr(command,
+			"&&", ft_strlen(command)))
+		free(commands[1]);
+	free(commands);
 	return (root);
 }
