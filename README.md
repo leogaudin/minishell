@@ -11,7 +11,7 @@
 </div>
 
 <h2>⚠️ This project is currently in progress and is neither finished nor tested</h2>
-<h2>⚠️ Remember that even if there is a nice README with cool emojis, this project has still be made by students and is probably far from perfect</h2>
+<h2>⚠️ Remember that even if there is a nice README with cool emojis, this project has been made by students and is probably far from perfect</h2>
 
 ## 📖 Table of Contents
 <!--ts-->
