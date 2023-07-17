@@ -72,7 +72,7 @@ ln /opt/homebrew/Cellar/readline/8.2.1/lib/libreadline.8.dylib /usr/local/lib/li
 #### `cd`
 
 ```c
-int ft_cd(t_fullcmd fullcmd, char ***env)
+int	ft_cd(t_fullcmd fullcmd, char ***env)
 {
 	char	*path;
 	char	*oldpath;
@@ -146,7 +146,7 @@ The `env` command simply iterates through the environment variables fetched at t
 #### `exit`
 
 ```c
-void ft_exit(t_fullcmd fullcmd, char ***env)
+void	ft_exit(t_fullcmd fullcmd, char ***env)
 {
 	int i;
 
@@ -179,13 +179,13 @@ The `exit` command is used to exit the shell. It takes into account the exit sta
 #### `Ctrl-C`
 
 ```c
-void sigint_handler(int sig)
+void	sigint_handler(int sig)
 {
 	(void)sig;
 	ft_putchar_fd('\n', 1);
-    rl_replace_line("", 0);
-    rl_on_new_line();
-    rl_redisplay();
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 ```
 
