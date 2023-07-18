@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_strnstr_index.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 11:12:48 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/17 20:01:21 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/17 19:14:30 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 
-char	*ft_strnstr(const char *big, const char *little, size_t len)
+int		ft_strnstr_index(const char *big, const char *little, size_t len)
 {
 	int	i;
 	int	j;
 
 	if (little[0] == '\0' || (len == 0 && !big))
-		return ((char *)big);
+		return (0);
 	i = 0;
 	while (big[i] != '\0' && (size_t)i < len)
 	{
@@ -31,7 +31,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 				break ;
 		}
 		if (little[j] == '\0')
-			return ((char *)big + i);
+			return (i);
 		i++;
 	}
 	return (0);

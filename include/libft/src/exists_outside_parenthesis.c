@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tab.c                                      :+:      :+:    :+:   */
+/*   exists_outside_parenthesis.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 10:25:16 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/18 15:01:51 by lgaudin          ###   ########.fr       */
+/*   Created: 2023/07/18 15:39:00 by lgaudin           #+#    #+#             */
+/*   Updated: 2023/07/18 15:39:19 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_free_tab(char **tab)
+bool	exists_out_parenthesis(char *command, char *token)
 {
-	int	i;
+	int	index;
 
-	i = 0;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
+	index = ft_strnstr_index(command, token, ft_strlen(command));
+	if (index && (!is_between_parenthesis(command, index)
+			|| exists_out_parenthesis(command + index + ft_strlen(token),
+				token)))
+		return (true);
+	return (false);
 }

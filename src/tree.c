@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/17 16:09:14 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/18 15:41:07 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @param    operand   The operand of the node.
  * @return   t_node*   The newly created node.
  */
-t_node	*create_node(char *operator, char *operand)
+t_node	*create_node(char *operator, char * operand)
 {
 	t_node	*new_node;
 
@@ -42,7 +42,17 @@ t_node	*create_node(char *operator, char *operand)
  */
 t_node	*create_operand_node(char *operand)
 {
-	return (create_node(NULL, operand));
+	t_node	*new_node;
+
+	operand = strip_parenthesis(operand);
+	if (exists_out_parenthesis(operand, "||") || exists_out_parenthesis(operand, "&&"))
+	{
+		new_node = generate_node_from_command(operand);
+		free(operand);
+		return (new_node);
+	}
+	else
+		return (create_node(NULL, operand));
 }
 
 /**
@@ -99,9 +109,9 @@ t_node	*generate_node_from_command(const char *command)
 	root = NULL;
 	token = NULL;
 	commands = NULL;
-	if (ft_strnstr(command, "||", ft_strlen(command)))
+	if (exists_out_parenthesis((char *)command, "||"))
 		token = "||";
-	else if (ft_strnstr(command, "&&", ft_strlen(command)))
+	else if (exists_out_parenthesis((char *)command, "&&"))
 		token = "&&";
 	if (token)
 	{
@@ -109,12 +119,9 @@ t_node	*generate_node_from_command(const char *command)
 		root = create_operator_node(ft_strdup(token));
 		root->left = generate_node_from_command(commands[0]);
 		root->right = generate_node_from_command(commands[1]);
+		ft_free_tab(commands);
 	}
 	else
 		root = create_operand_node((char *)command);
-	if (ft_strnstr(command, "||", ft_strlen(command)) || ft_strnstr(command,
-			"&&", ft_strlen(command)))
-		free(commands[1]);
-	free(commands);
 	return (root);
 }

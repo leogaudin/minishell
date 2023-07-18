@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 13:01:52 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/01 15:52:19 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/18 15:10:13 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,59 +14,61 @@
 
 static int	strings_count(char const *str, char *token)
 {
-	if (ft_strnstr(str, token, ft_strlen(str)))
+	if (ft_strnstr_index(str, token, ft_strlen(str)) != 0)
 		return (2);
 	return (1);
 }
 
-static int	string_length(char const *s, char *token, int i)
+static int	string_length(char const *s, char *token)
 {
-	int		length;
-	char	*strnstr;
+	int		end_of_s;
 	char	*str;
 
-	if (i < 0 || i > (int)ft_strlen(s) || !s || !token)
+	if (!s || !token)
 		return (0);
-	length = 0;
-	str = (char *)s + i;
-	strnstr = ft_strnstr(str, token, ft_strlen(s));
-	if (strnstr == NULL)
+	str = (char *)s;
+	end_of_s = ft_strnstr_index(str, token, ft_strlen(s));
+	if (is_between_parenthesis(str, end_of_s))
+	{
+		return (end_of_s + ft_strlen(token) + string_length(str + end_of_s
+				+ ft_strlen(token), token));
+	}
+	if (end_of_s == 0)
 		return (ft_strlen(str));
-	if (strnstr == str || ft_strlen(strnstr) == ft_strlen(token))
+	if (end_of_s == (int)ft_strlen(token))
 		return (ft_strlen(str) - ft_strlen(token));
-	length = ft_strlen(str) - ft_strlen(strnstr);
-	return (length);
+	return (end_of_s);
 }
-
-// static void	free_all(char **result, int index)
-// {
-// 	while (index-- > 0)
-// 		free(result[index]);
-// 	free(result);
-// }
 
 char	**ft_split_str_once(char const *s, char *token)
 {
 	char	**result;
-	int		result_index;
-	int		token_length;
 
 	if (!s || !token)
 		return (0);
-	result_index = 0;
-	token_length = ft_strlen(token);
 	result = malloc((strings_count(s, token) + 1) * sizeof(char *));
 	if (!result)
-		return (0);
+		return (ft_malloc_error());
 	if (strings_count(s, token) == 1)
 		result[0] = ft_strdup((char *)s);
 	else
 	{
-		result[0] = ft_substr(s, 0, string_length(s, token, 0));
-		result[1] = ft_substr(s, ft_strlen(result[0]) + token_length,
-				ft_strlen(s) - ft_strlen(result[0]));
-		result_index++;
+		result[0] = ft_substr(s, 0, string_length(s, token));
+		result[1] = ft_substr(s, string_length(s, token)
+					+ ft_strlen(token), ft_strlen(s) - ft_strlen(result[0]));
 	}
-	result[result_index + 1] = 0;
+	result[2] = 0;
 	return (result);
 }
+
+// int	main(void)
+// {
+// 	char	*s;
+// 	char	**result;
+
+// 	s = "     ls       &&     (    pwd    &&    echo    )     ";
+// 	result = ft_split_str_once(s, "&&");
+// 	ft_printf("%s\n", result[0]);
+// 	ft_printf("%s\n", result[1]);
+// 	return (0);
+// }

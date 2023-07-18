@@ -1,23 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tab.c                                      :+:      :+:    :+:   */
+/*   strip_parenthesis.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 10:25:16 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/18 15:01:51 by lgaudin          ###   ########.fr       */
+/*   Created: 2023/07/18 09:32:47 by lgaudin           #+#    #+#             */
+/*   Updated: 2023/07/18 15:12:31 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_free_tab(char **tab)
+char	*strip_parenthesis(char *str)
 {
-	int	i;
+	int i;
+	int start;
+	int end;
+	char *new;
 
 	i = 0;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
+	start = 0;
+	end = ft_strlen(str);
+	while (str[i])
+	{
+		if (str[i] == '(')
+			start = i + 1;
+		if (str[i] == ')')
+			end = i;
+		i++;
+	}
+	new = ft_substr(str, start, end - start);
+	if (!new)
+		return (ft_malloc_error());
+	return (new);
 }
