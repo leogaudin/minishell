@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/12 10:25:10 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/18 08:38:55 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,30 @@ void	ft_freecmds(t_cmd *cmds, int n)
 	free(cmds);
 }
 
+int	ft_getlen_pipe(char *block, int i)
+{
+	int len;
+
+	len = 0;
+	while (block[i + len] && block[i + len] != '|')
+	{
+		if ((block[i + len] == '\"') && ft_findchar(&block[i + len + 1], '\"') == 1)
+		{
+			len++;
+			while (block[i + len] != '\"')
+				len++;
+		}
+		else if ((block[i + len] == '\'') && ft_findchar(&block[i + len + 1], '\'') == 1)
+		{
+			len++;
+			while (block[i + len] != '\'')
+				len++;
+		}
+		len++;
+	}
+	return (len);
+}
+
 char	**ft_separatepipes(char *block)
 {
 	char 	**blocksep;
@@ -142,23 +166,7 @@ char	**ft_separatepipes(char *block)
 	blocksep = NULL;
 	while (block[i])
 	{
-		len = 0;
-		while (block[i + len] && block[i + len] != '|')
-		{
-			if ((block[i + len] == '\"') && ft_findchar(&block[i + len + 1], '\"') == 1)
-			{
-				len++;
-				while (block[i + len] != '\"')
-					len++;
-			}
-			else if ((block[i + len] == '\'') && ft_findchar(&block[i + len + 1], '\'') == 1)
-			{
-				len++;
-				while (block[i + len] != '\'')
-					len++;
-			}
-			len++;
-		}
+		len = ft_getlen_pipe(block, i);
 		str = ft_substr(&block[i], 0, len);
 		if (!str)
 		{
@@ -175,69 +183,7 @@ char	**ft_separatepipes(char *block)
 	return (blocksep);
 }
 
-char	*ft_getname(char *line, int *len)
-{
-	int i;
-	int j;
-	char *name;
-
-	if (line[*len] == '\"' && ft_findchar(&line[*len + 1], '\"'))
-	{
-		(*len)++;
-		i = 0;
-		while (line[*len + i] != '\"')
-			i++;
-		name = malloc((i + 1) * sizeof(char));
-		if (!name)
-			return (ft_putendl_fd("Memory allocation failed\n", 2), NULL);
-		j = 0;
-		while (j < i)
-		{
-			name[j] = line[*len + j];
-			j++;
-		}
-		name[j] = 0;
-		(*len) += i + 1;
-	}
-	else if (line[*len] == '\'' && ft_findchar(&line[*len + 1], '\''))
-	{
-		(*len)++;
-		i = 0;
-		while (line[*len + i] != '\'')
-			i++;
-		name = malloc((i + 1) * sizeof(char));
-		if (!name)
-			return (ft_putendl_fd("Memory allocation failed\n", 2), NULL);
-		j = 0;
-		while (j < i)
-		{
-			name[j] = line[*len + j];
-			j++;
-		}
-		name[j] = 0;
-		(*len) += i + 1;
-	}
-	else
-	{
-		i = 0;
-		while ((line[i] > 32) && (line[i] != '<' && line[i] != '>' && line[i] != '*' && line[i] != '|' && line[i] != '\'' && line[i] != '"'))
-			i++;
-		name = malloc((i + 1) * sizeof(char));
-		if (!name)
-			return (ft_putendl_fd("Memory allocation failed\n", 2), NULL);
-		j = 0;
-		while (j < i)
-		{
-			name[j] = line[*len + j];
-			j++;
-		}
-		name[j] = 0;
-		(*len) += i;
-	}
-	return (name);
-}
-
-char *straddfree(char *str, char chr)
+char *ft_straddfree(char *str, char chr)
 {
 	char	*new;
 	int		len;
@@ -250,7 +196,7 @@ char *straddfree(char *str, char chr)
 	new = malloc((len + 2) * sizeof(char));
 	if (!new)
 	{
-		ft_putendl_fd("Memory allocation failed\n", STDERR_FILENO);
+		ft_putendl_fd("Memory allocation failed.", STDERR_FILENO);
 		return (NULL);
 	}
 	i = 0;
@@ -266,18 +212,62 @@ char *straddfree(char *str, char chr)
 	return (new);
 }
 
+char *ft_addwhilenotchar(char *line, char *name, int *len, char c)
+{
+	name = ft_straddfree(name, line[*len]);
+	if (!name)
+		return (NULL);
+	(*len)++;
+	while (line[*len] != c)
+	{
+		name = ft_straddfree(name, line[*len]);
+		if (!name)
+			return (NULL);
+		(*len)++;
+	}
+	name = ft_straddfree(name, line[*len]);
+	if (!name)
+		return (NULL);
+	(*len)++;
+	return (name);
+}
+
+char	*ft_getstr(char *line, int *len)
+{
+	char	*name;
+
+	name = NULL;
+	while ((line[*len] > 32) && (line[*len] != '<' && line[*len] != '>'))
+	{
+		if (line[*len] == '\"' && ft_findchar(&line[*len + 1], '\"'))
+			name = ft_addwhilenotchar(line, name, len, '\"');
+		else if (line[*len] == '\'' && ft_findchar(&line[*len + 1], '\''))
+			name = ft_addwhilenotchar(line, name, len, '\'');
+		else
+		{
+			name = ft_straddfree(name, line[*len]);
+			(*len)++;
+		}
+		if (!name)
+			return (NULL);
+	}
+	return (name);
+}
+
 char	*ft_get_cmdarg(char *line)
 {
 	int		i;
 	char	*new;
 
 	i = 0;
-	new = NULL;//maybe empyty string instead of null to diff between no arg and malloc error
+	new = strdup("");
+	if (!new)
+		return (NULL);
 	while (line[i])
 	{
 		while (line[i] && line[i] != '<' && line[i] != '>')
 		{
-			new = straddfree(new, line[i]);
+			new = ft_straddfree(new, line[i]);
 			if (!new)
 				return (NULL);
 			i++;
@@ -286,23 +276,23 @@ char	*ft_get_cmdarg(char *line)
 		{
 			while (line[i] == ' ' || (line[i] >= 9 && line[i] <= 13) || line[i] == '>' || line[i] == '<')
 				i++;
-			if (line[i] == '\"' && ft_findchar(&line[i + 1], '\"'))
+			while (line[i] > 32 && line[i] != '>' && line[i] != '<')
 			{
-				i++;
-				while (line[i] != '\"')
+				if (line[i] == '\"' && ft_findchar(&line[i + 1], '\"'))
+				{
 					i++;
-				i++;
-			}
-			else if (line[i] == '\'' && ft_findchar(&line[i + 1], '\''))
-			{
-				i++;
-				while (line[i] != '\'')
+					while (line[i] != '\"')
+						i++;
 					i++;
-				i++;
-			}
-			else
-			{
-				while ((line[i] > 32) && (line[i] != '<' && line[i] != '>' && line[i] != '*' && line[i] != '|' && line[i] != '\'' && line[i] != '"'))//what if " is part of string?
+				}
+				else if (line[i] == '\'' && ft_findchar(&line[i + 1], '\''))
+				{
+					i++;
+					while (line[i] != '\'')
+						i++;
+					i++;
+				}
+				else
 					i++;
 			}
 		}
@@ -328,7 +318,6 @@ t_cmd	*ft_initcmds(char **blocksep, t_cmd *cmds)
 		cmds[i].cmdarg = ft_get_cmdarg(blocksep[i]);
 		if (!cmds[i].cmdarg)
 		{
-			//add some error for when there is no command!
 			j = 0;
 			while (j < i)
 				free(cmds[j++].cmdarg);
@@ -337,6 +326,24 @@ t_cmd	*ft_initcmds(char **blocksep, t_cmd *cmds)
 		i++;
 	}
 	return (cmds);
+}
+
+void	ft_skip_str(char **blocksep, int i, int *j)
+{
+	if ((blocksep[i][*j] == '\"') && ft_findchar(&blocksep[i][*j + 1], '\"') == 1)
+	{
+		(*j)++;
+		while (blocksep[i][*j] != '\"')
+			(*j)++;
+		(*j)++;
+	}
+	else if ((blocksep[i][*j] == '\'') && ft_findchar(&blocksep[i][*j + 1], '\'') == 1)
+	{
+		(*j)++;
+		while (blocksep[i][*j] != '\'')
+			j++;
+		(*j)++;
+	}
 }
 
 t_cmd *ft_putinstruct(char **blocksep)
@@ -349,40 +356,27 @@ t_cmd *ft_putinstruct(char **blocksep)
 
 	cmds = malloc(ft_arrlen(blocksep) * sizeof(t_cmd));
 	if (!cmds)
-		return (ft_putendl_fd("Memory allocation failed\n", 2), NULL);
+		return (ft_putendl_fd("Memory allocation failed.", 2), NULL);
 	cmds = ft_initcmds(blocksep, cmds);
 	if (!cmds)
 		return (NULL);
-	i = 0;
-	while (blocksep[i])
+	i = -1;
+	while (blocksep[++i])
 	{
 		j = 0;
 		while (blocksep[i][j])
 		{
-			if ((blocksep[i][j] == '\"') && ft_findchar(&blocksep[i][j + 1], '\"') == 1)
-			{
-				j++;
-				while (blocksep[i][j] != '\"')
-					j++;
-				j++;
-			}
-			else if ((blocksep[i][j] == '\'') && ft_findchar(&blocksep[i][j + 1], '\'') == 1)
-			{
-				j++;
-				while (blocksep[i][j] != '\'')
-					j++;
-				j++;
-			}
+			ft_skip_str(blocksep, i, &j);
 			if (blocksep[i][j] == '<' && ft_findcharout(&blocksep[i][j + 1], '<') == 0)
 			{
 				if (j > 0 && blocksep[i][j - 1] == '<')
 				{
 					cmds[i].rein.herein = 1;
 					j++;
-					while ((blocksep[i][j] == ' ' || (blocksep[i][j] >= 9 && blocksep[i][j] <= 13)) && (blocksep[i][j] != '<' && blocksep[i][j] != '>' && blocksep[i][j] != '*' && blocksep[i][j] != '|'))
+					while ((blocksep[i][j] == ' ' || (blocksep[i][j] >= 9 && blocksep[i][j] <= 13)))
 						j++;
 					len = 0;
-					name = ft_getname(&blocksep[i][j], &len);
+					name = ft_strip_quotes(ft_getstr(&blocksep[i][j], &len));
 					if (!name)
 						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].rein.heredel = name;
@@ -392,10 +386,10 @@ t_cmd *ft_putinstruct(char **blocksep)
 				{
 					cmds[i].rein.rein = 1;
 					j++;
-					while ((blocksep[i][j] == ' ' || (blocksep[i][j] >= 9 && blocksep[i][j] <= 13)) && (blocksep[i][j] != '<' && blocksep[i][j] != '>' && blocksep[i][j] != '*' && blocksep[i][j] != '|'))
+					while ((blocksep[i][j] == ' ' || (blocksep[i][j] >= 9 && blocksep[i][j] <= 13)))
 						j++;
 					len = 0;
-					name = ft_getname(&blocksep[i][j], &len);
+					name = ft_strip_quotes(ft_getstr(&blocksep[i][j], &len));
 					if (!name)
 						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].rein.infile = name;
@@ -408,10 +402,10 @@ t_cmd *ft_putinstruct(char **blocksep)
 				{
 					cmds[i].reout.reoutapp = 1;
 					j++;
-					while ((blocksep[i][j] == ' ' || (blocksep[i][j] >= 9 && blocksep[i][j] <= 13)) && (blocksep[i][j] != '<' && blocksep[i][j] != '>' && blocksep[i][j] != '*' && blocksep[i][j] != '|'))
+					while ((blocksep[i][j] == ' ' || (blocksep[i][j] >= 9 && blocksep[i][j] <= 13)))
 						j++;
 					len = 0;
-					name = ft_getname(&blocksep[i][j], &len);
+					name = ft_strip_quotes(ft_getstr(&blocksep[i][j], &len));
 					if (!name)
 						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].reout.outfile = name;
@@ -421,10 +415,10 @@ t_cmd *ft_putinstruct(char **blocksep)
 				{
 					cmds[i].reout.reout = 1;
 					j++;
-					while ((blocksep[i][j] == ' ' || (blocksep[i][j] >= 9 && blocksep[i][j] <= 13)) && (blocksep[i][j] != '<' && blocksep[i][j] != '>' && blocksep[i][j] != '*' && blocksep[i][j] != '|'))
+					while ((blocksep[i][j] == ' ' || (blocksep[i][j] >= 9 && blocksep[i][j] <= 13)))
 						j++;
 					len = 0;
-					name = ft_getname(&blocksep[i][j], &len);
+					name = ft_strip_quotes(ft_getstr(&blocksep[i][j], &len));
 					if (!name)
 						return (ft_freecmds(cmds, ft_arrlen(blocksep)), NULL);
 					cmds[i].reout.outfile = name;
@@ -434,7 +428,6 @@ t_cmd *ft_putinstruct(char **blocksep)
 			else
 				j++;
 		}
-		i++;
 	}
 	return (cmds);
 }

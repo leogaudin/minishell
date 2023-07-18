@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/17 16:16:23 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/18 08:38:26 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,5 +176,16 @@ int					ft_env(t_fullcmd fullcmd, char ***env);
 int					ft_unset(t_fullcmd fullcmd, char ***env);
 int					ft_cd(t_fullcmd fullcmd, char ***env);
 void				ft_exit(t_fullcmd fullcmd, char ***env);
+
+int					ft_findcharout(char *str, char c);
+void				ft_freecmds(t_cmd *cmds, int n);
+char				*ft_getenv(char *var, char **env);
+char				*ft_replace(char *line, char *varname, int pos, char ***env);
+char				*ft_getvar_and_replace(int *i, char *expline, char ***env);
+char				*ft_expandvar(char *line, char ***env);
+char				**ft_expandasterisk(char **pattern_pieces, int *ast);
+char 				**ft_pattern_pieces(char *str, int *ast);
+char				*ft_getstr(char *line, int *len);
+char				*ft_strip_quotes(char *str);
 
 #endif

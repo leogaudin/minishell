@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/16 15:08:13 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/18 08:29:59 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,22 @@ char	*ft_getenv(char *var, char **env)
 		}
 		i++;
 	}
-	return (ft_strdup(NULL));//for now I return an empty string when it doesn't find the variable to diff between malloc error and not finding the var.
+	return (ft_strdup(""));
+}
+
+int	ft_existenv(char *var, char **env)
+{
+	int		i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(var, env[i], ft_strlen(var)) == 0
+			&& env[i][ft_strlen(var)] == '=')
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
 int	ft_echo(t_fullcmd fullcmd)
@@ -73,21 +88,6 @@ int	ft_pwd(char **env)
 	if (write(STDOUT_FILENO, "\n", 1) < 0)
 		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	return (0);
-}
-
-int	ft_existenv(char *var, char **env)
-{
-	int		i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(var, env[i], ft_strlen(var)) == 0
-			&& env[i][ft_strlen(var)] == '=')
-			return (i);
-		i++;
-	}
-	return (-1);
 }
 
 int	ft_export(t_fullcmd fullcmd, char ***env)
@@ -141,10 +141,8 @@ char	**ft_arrremove(char **env, int pos)
 	int		i;
 	int		len;
 
-	if (!env)
-		return (env);
 	len = ft_arrlen(env);
-	if (pos >= len || pos < 0)
+	if (!env || pos >= len || pos < 0)
 		return (env);
 	new = malloc(len * sizeof(char *));
 	if (!new)
@@ -168,36 +166,33 @@ char	**ft_arrremove(char **env, int pos)
 int	ft_unset(t_fullcmd fullcmd, char ***env)
 {
 	int		i;
-	char	*varname;
 	int		ok;
 	int		len;
 	int		varpos;
+	char	*varname;
 
 	i = 0;
-	while (fullcmd.argums[i])
+	ok = 0;
+	while (fullcmd.argums[++i])
 	{
-		len = 0;
-		while (fullcmd.argums[i][len] && fullcmd.argums[i][len] != '=')
+		len = -1;
+		while (fullcmd.argums[i][++len])
 		{
-			if (ft_isalnum(fullcmd.argums[i][len]) == 0 && fullcmd.argums[i][len] != '_')
+			if (ft_isalnum(fullcmd.argums[i][len]) == 0
+				&& fullcmd.argums[i][len] != '_')
 			{
 				ok = 1;
-				ft_putendl_fd("Variable names must only contain alphanumeric characters or underscores.", STDERR_FILENO);
+				ft_putendl_fd("Variable names must only contain alphanumeric\
+ characters or underscores.", STDERR_FILENO);
 				break ;
 			}
-			len++;
 		}
 		if (ok == 0)
 		{
 			varname = ft_substr(fullcmd.argums[i], 0, len);
 			varpos = ft_existenv(varname, *env);
-			free(varname);
-			if (varpos >= 0)
-			{
-				*env = ft_arrremove(*env, varpos);
-			}
+			*env = ft_arrremove(*env, varpos);
 		}
-		i++;
 	}
 	return (0);
 }
@@ -208,11 +203,12 @@ int	ft_env(t_fullcmd fullcmd, char ***env)
 
 	i = 0;
 	if (fullcmd.argums[1] != NULL)
-		return (ft_putendl_fd("The builtin env does not take arguments or options.", STDERR_FILENO), -1);
+		return (ft_putendl_fd("The builtin env does not take arguments or\
+ options.", STDERR_FILENO), -1);
 	while ((*env)[i])
 	{
-		//if (getenv()) add condition to not print when not set
-		printf("%s\n", (*env)[i]);
+		if (ft_findchar((*env)[i], '='))
+			printf("%s\n", (*env)[i]);
 		i++;
 	}
 	return (0);
