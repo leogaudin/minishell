@@ -11,7 +11,7 @@
 </div>
 
 <h2>⚠️ This project is currently in progress and is neither finished nor tested</h2>
-<h2>⚠️ Remember that even if there is a nice README with cool emojis, this project has been made by students and is probably far from perfect</h2>
+<h2>⚠️ Remember that even if there is a nice README with cool emojis, this project has been made by (very good though) students and is probably not perfect</h2>
 
 <h2>💧 Leaks (dev only)</h2>
 
