@@ -6,11 +6,24 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 11:22:17 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/18 08:29:59 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/26 12:31:38 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+char	*ft_getquestionmark(void)
+{
+	char	*value;
+
+	value = ft_itoa(g_exit_code);
+	if (!value)
+	{
+		ft_putendl_fd("Memory allocation failed.", STDERR_FILENO);
+		return (NULL);
+	}
+	return (value);
+}
 
 char	*ft_getenv(char *var, char **env)
 {
@@ -18,6 +31,8 @@ char	*ft_getenv(char *var, char **env)
 	char	*value;
 
 	i = 0;
+	if (*var == '?')
+		return (ft_getquestionmark());
 	while (env[i])
 	{
 		if (ft_strncmp(var, env[i], ft_strlen(var)) == 0 && env[i][ft_strlen(var)] == '=')
@@ -29,7 +44,13 @@ char	*ft_getenv(char *var, char **env)
 		}
 		i++;
 	}
-	return (ft_strdup(""));
+	value = ft_strdup("");
+	if (!value)
+	{
+		ft_putendl_fd("Memory allocation failed.", STDERR_FILENO);
+		return (NULL);
+	}
+	return (value);
 }
 
 int	ft_existenv(char *var, char **env)
@@ -84,10 +105,23 @@ int	ft_pwd(char **env)
 
 	wd = ft_getenv("PWD", env);
 	if (write(STDOUT_FILENO, wd, ft_strlen(wd)) < 0)
-		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+		return (free(wd), ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
 	if (write(STDOUT_FILENO, "\n", 1) < 0)
-		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
-	return (0);
+		return (free(wd), ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
+	return (free(wd), 0);
+}
+
+void	ft_exportnoarg(char ***env)
+{
+	int i;
+
+	i = 0;
+	while ((*env)[i])
+	{
+		if (ft_findchar((*env)[i], '='))
+			printf("declare -x %s\n", (*env)[i]);
+		i++;
+	}
 }
 
 int	ft_export(t_fullcmd fullcmd, char ***env)
@@ -99,6 +133,8 @@ int	ft_export(t_fullcmd fullcmd, char ***env)
 	int		varpos;
 
 	//malloc protections!!
+	if (!fullcmd.argums[1])
+		ft_exportnoarg(env);
 	i = 1;
 	while (fullcmd.argums[i])
 	{
@@ -144,6 +180,7 @@ char	**ft_arrremove(char **env, int pos)
 	len = ft_arrlen(env);
 	if (!env || pos >= len || pos < 0)
 		return (env);
+	new = NULL;
 	new = malloc(len * sizeof(char *));
 	if (!new)
 		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), NULL);
@@ -153,13 +190,14 @@ char	**ft_arrremove(char **env, int pos)
 		new[i] = env[i];
 		i++;
 	}
-	i++;
+	free(env[i++]);
 	while (env[i])
 	{
 		new[i - 1] = env[i];
 		i++;
 	}
-	new[len] = NULL;
+	new[len - 1] = NULL;
+	free(env);
 	return (new);
 }
 
@@ -191,6 +229,7 @@ int	ft_unset(t_fullcmd fullcmd, char ***env)
 		{
 			varname = ft_substr(fullcmd.argums[i], 0, len);
 			varpos = ft_existenv(varname, *env);
+			free(varname);
 			*env = ft_arrremove(*env, varpos);
 		}
 	}
@@ -213,7 +252,6 @@ int	ft_env(t_fullcmd fullcmd, char ***env)
 	}
 	return (0);
 }
-
 
 void determine_path(char **path, char *home, t_fullcmd fullcmd, char ***env)
 {
@@ -238,15 +276,28 @@ int	change_path(char *path, t_fullcmd fullcmd)
 		free(path);
 		return (1);
 	}
+	free(path);
 	return (0);
 }
 
-void	update_pwd(char *path, char *oldpath, char ***env)
+int	update_pwd(char *path, char *oldpath, char ***env)
 {
-	ft_arrremove(*env, ft_existenv("PWD", *env));
-	ft_arrremove(*env, ft_existenv("OLDPWD", *env));
-	ft_parseandexec(ft_strjoin("export OLDPWD=", oldpath), env);
-	ft_parseandexec(ft_strjoin("export PWD=", path), env);
+	int	err;
+
+	err = 0;
+	oldpath = ft_strjoinfree("export OLDPWD=", oldpath, 2);
+	if (!oldpath)
+		return (ft_putendl_fd("Memory allocation failed2.", STDERR_FILENO), -1);
+	path = ft_strjoinfree("export PWD=", path, 2);
+	if (!path)
+		return (ft_putendl_fd("Memory allocation failed3.", STDERR_FILENO), -1);
+	err = ft_parseandexec(oldpath, env);
+	if (err)
+		return (free(oldpath), free(path), -1);
+	err = ft_parseandexec(path, env);
+	free(oldpath);
+	free(path);
+	return (err);
 }
 
 int ft_cd(t_fullcmd fullcmd, char ***env)
@@ -257,38 +308,51 @@ int ft_cd(t_fullcmd fullcmd, char ***env)
 
 	path = NULL;
 	home = ft_getenv("HOME", *env);
-	oldpath = ft_strdup(getcwd(NULL, 0));
+	if (!home)
+		return (-1);
+	//oldpath = getcwd(NULL, 0);
+	oldpath = ft_getenv("PWD", *env);//changed this so that it works when you do cd .. after removing the directory you were in
+	if (!oldpath)
+		return (free (home), ft_putendl_fd("Memory allocation failed1.", STDERR_FILENO), -1);
 	determine_path(&path, home, fullcmd, env);
 	if (path == NULL)
-		return (ft_printf("cd: HOME not set\n"), 1);
+		return (free(oldpath), free(home), ft_printf("cd: HOME not set\n"), 1);//what about malloc error?
 	if (change_path(path, fullcmd))
-		return (1);
-	path = ft_strdup(getcwd(NULL, 0));
-	update_pwd(path, oldpath, env);
-	return (free(path), free(oldpath), free(home), 0);
+		return (free(oldpath), free(home), 1);
+	path = getcwd(NULL, 0);
+	if (update_pwd(path, oldpath, env))
+		return (-1);
+	return (free(home), 0);
 }
 
-void ft_exit(t_fullcmd fullcmd, char ***env)
+void ft_exit(char *cmd, char ***env)
 {
 	int i;
+	char **argums;
 
-	(void)env;
+	argums = ft_execargums(cmd, env);
+	free(cmd);
+	ft_freearr(*env);
 	i = 0;
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	if (fullcmd.argums[1] != NULL && fullcmd.argums[2] != NULL)
-		return (ft_putendl_fd("exit: too many arguments", STDERR_FILENO), (void)0);
-	if (fullcmd.argums[1] != NULL)
+	if (argums[1] != NULL && argums[2] != NULL)
+		return (ft_freearr(argums), ft_putendl_fd("exit: too many arguments", STDERR_FILENO), (void)0);
+	if (argums[1] != NULL)
 	{
-		while (fullcmd.argums[1][i])
+		while (argums[1][i])
 		{
-			if (ft_isdigit(fullcmd.argums[1][i]) == 0)
+			if (ft_isdigit(argums[1][i]) == 0)
 			{
 				ft_putendl_fd("exit: numeric argument required", STDERR_FILENO);
+				ft_freearr(argums);
 				exit(255);
 			}
 			i++;
 		}
-		exit(ft_atoi(fullcmd.argums[1]));
+		g_exit_code = ft_atoi(argums[1]);
+		ft_freearr(argums);
+		exit(g_exit_code);
 	}
-	exit(0);
+	ft_freearr(argums);
+	exit(g_exit_code);
 }

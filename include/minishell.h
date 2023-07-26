@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/18 08:38:26 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/26 12:54:09 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,12 @@
 /* tgetent tgetflag tgetnum tgetstr tgoto tputs */
 # include <term.h>
 
-int	g_exit_code = 0;
+//# ifndef EXIT_CODE_VAR
+//#  define EXIT_CODE_VAR
+
+int	g_exit_code;
+
+//# endif
 
 // tree.c
 typedef struct s_node
@@ -72,10 +77,10 @@ void				print_ast(t_node *root, int indent);
 
 // execute_tree.c
 int					execute_command(const char *command);
-int					execute_node(t_node *node, char ***env);
+int					execute_node(t_node *node, char ***env, t_node *root);
 int					execute_operator_node(t_node *node, int left_status,
-						char ***env);
-int					execute_operand_node(t_node *node, char ***env);
+						char ***env, t_node *root);
+int					execute_operand_node(t_node *node, char ***env, t_node *root);
 
 /**
  * Structure that holds the information about redirections.
@@ -144,8 +149,8 @@ char				**ft_splitnotstr(char *str, char c);
 char				*ft_strjoinfree(char *begin, char *end, int num);
 
 int					**ft_execfdpairs(int cmdct);
-char				*ft_execgetpathname(char *cmd);
-char				**ft_execargums(char *cmdarg);
+char	*ft_execgetpathname(char *cmd, char ***env);
+char	**ft_execargums(char *cmdarg, char ***env);
 int					ft_execheredoc(char *delim);
 int					ft_execcloseall(int **fd, int pipect);
 int					ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i,
@@ -166,7 +171,7 @@ char				*ft_getname(char *line, int *len);
 char				*straddfree(char *str, char chr);
 char				*ft_get_cmdarg(char *line);
 t_cmd				*ft_putinstruct(char **blocksep);
-int					ft_parseandexec(char *line, char ***env);
+int					ft_parseandexec(char *line, char ***env, t_node *root);
 
 int					ft_echo(t_fullcmd fullcmd);
 int					ft_pwd(char **env);
@@ -175,17 +180,19 @@ int					ft_export(t_fullcmd fullcmd, char ***env);
 int					ft_env(t_fullcmd fullcmd, char ***env);
 int					ft_unset(t_fullcmd fullcmd, char ***env);
 int					ft_cd(t_fullcmd fullcmd, char ***env);
-void				ft_exit(t_fullcmd fullcmd, char ***env);
+void ft_exit(char *cmd, char ***env);
 
 int					ft_findcharout(char *str, char c);
 void				ft_freecmds(t_cmd *cmds, int n);
 char				*ft_getenv(char *var, char **env);
-char				*ft_replace(char *line, char *varname, int pos, char ***env);
+char				*ft_replace(char *line, char *varname, int *pos, char ***env);
 char				*ft_getvar_and_replace(int *i, char *expline, char ***env);
 char				*ft_expandvar(char *line, char ***env);
 char				**ft_expandasterisk(char **pattern_pieces, int *ast);
-char 				**ft_pattern_pieces(char *str, int *ast);
+char				**ft_pattern_pieces(char *str, int *ast);
 char				*ft_getstr(char *line, int *len);
 char				*ft_strip_quotes(char *str);
+int					ft_existenv(char *var, char **env);
+char				**ft_arrremove(char **env, int pos);
 
 #endif

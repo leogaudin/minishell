@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strip_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 19:03:35 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/16 20:09:23 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/18 09:53:49 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,18 @@ char	*ft_strip_quotes(char *str)
 	i = 0;
 	j = 0;
 	count = 0;
+	if (!str)
+		return (str);
 	ft_count_quotes(str, i - 1, &count);
 	new = (char *)malloc(sizeof(char) * (ft_strlen(str) - count + 1));
 	if (!new)
-		return (ft_malloc_error());
+		return (free(str), ft_malloc_error());
 	while (str[i])
 	{
 		ft_copy_quotes(str, i, &new, &j);
 		i++;
 	}
 	new[j] = '\0';
+	free(str);
 	return (new);
 }

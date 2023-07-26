@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 09:08:11 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/12 10:32:41 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/26 12:45:54 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ int	execute_command(const char *command)
  * @param    left_status The exit status of the left child node.
  * @return   int         The exit status of the executed node.
  */
-int	execute_operator_node(t_node *node, int left_status, char ***env)
+int	execute_operator_node(t_node *node, int left_status, char ***env, t_node *root)
 {
 	if (ft_strcmp(node->operator, "&&") == 0 && left_status == 0)
-		return (execute_node(node->right, env));
+		return (execute_node(node->right, env, root));
 	else if (ft_strcmp(node->operator, "||") == 0 && left_status != 0)
-		return (execute_node(node->right, env));
+		return (execute_node(node->right, env, root));
 	return (left_status);
 }
 
@@ -97,11 +97,11 @@ int	execute_operator_node(t_node *node, int left_status, char ***env)
 	}
 } */
 
-int	execute_operand_node(t_node *node, char ***env)
+int	execute_operand_node(t_node *node, char ***env, t_node *root)
 {
-	if (ft_parseandexec(node->operand, env))
+	if (ft_parseandexec(node->operand, env, root))
 		return (-1);
-	return (1);
+	return (0);
 }
 
 /**
@@ -116,7 +116,7 @@ int	execute_operand_node(t_node *node, char ***env)
  * @param    node      The node to execute.
  * @return   int       The exit status of the executed node.
  */
-int	execute_node(t_node *node, char ***env)
+int	execute_node(t_node *node, char ***env, t_node *root)
 {
 	int	left_status;
 
@@ -124,9 +124,9 @@ int	execute_node(t_node *node, char ***env)
 		return (0);
 	if (node->operator)
 	{
-		left_status = execute_node(node->left, env);
-		return (execute_operator_node(node, left_status, env));
+		left_status = execute_node(node->left, env, root);
+		return (execute_operator_node(node, left_status, env, root));
 	}
 	else
-		return (execute_operand_node(node, env));
+		return (execute_operand_node(node, env, root));
 }

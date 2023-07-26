@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_freefuncs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:34:22 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/09 09:37:57 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/19 12:17:51 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,15 @@ void	ft_freesplit(char **arrstr)
  pointer fds and then frees the memory allocated in fds. */
 void	ft_frfds(int **fds, int i)
 {
-	while (i > 0)
+	int	n;
+
+	if (fds == NULL)
+		return ;
+	n = 0;
+	while (n < i - 1)
 	{
-		free(fds[i - 1]);
-		i--;
+		free(fds[n]);
+		n++;
 	}
 	free (fds);
 }

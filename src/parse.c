@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/18 08:38:55 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/20 09:24:44 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	ft_freearr(char **arr)
 	int	i;
 
 	i = 0;
-	while (arr[i])
+	while (arr && arr[i])
 	{
 		free(arr[i]);
 		i++;
@@ -93,7 +93,7 @@ char	**ft_arrapp(char **arr, char *app)
 	if (!newarr)
 	{
 		ft_freearr(arr);
-		ft_putendl_fd("Memory allocation failed\n", STDERR_FILENO);
+		ft_putendl_fd("Memory allocation failed.", STDERR_FILENO);
 	}
 	if (newarr)
 	{
@@ -321,6 +321,7 @@ t_cmd	*ft_initcmds(char **blocksep, t_cmd *cmds)
 			j = 0;
 			while (j < i)
 				free(cmds[j++].cmdarg);
+			free(cmds);
 			return (NULL);
 		}
 		i++;
@@ -341,7 +342,7 @@ void	ft_skip_str(char **blocksep, int i, int *j)
 	{
 		(*j)++;
 		while (blocksep[i][*j] != '\'')
-			j++;
+			(*j)++;
 		(*j)++;
 	}
 }
@@ -425,27 +426,9 @@ t_cmd *ft_putinstruct(char **blocksep)
 					j += len;
 				}
 			}
-			else
+			else if (blocksep[i][j] != 0)
 				j++;
 		}
 	}
 	return (cmds);
-}
-
-int	ft_parseandexec(char *line, char ***env)
-{
-	char	**res;
-	t_cmd	*cmds;
-	int		len;
-
-	res = ft_separatepipes(line);
-	if (!res)
-		return (-1);
-	len = ft_arrlen(res);
-	cmds = ft_putinstruct(res);
-	if (!cmds)
-		return (ft_freearr(res), -1);
-	if (ft_executer(cmds, ft_arrlen(res), env))
-		return (ft_freearr(res), ft_freecmds(cmds, len), -1);
-	return (ft_freearr(res), ft_freecmds(cmds, len), 0);
 }

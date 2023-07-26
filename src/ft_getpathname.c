@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:37:27 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/10 12:52:18 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/21 07:58:57 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*ft_pathname(char *cmd, char **paths)
 	while (paths[i] && acc != 0)
 	{
 		cmdpath = ft_strjoin(paths[i], cmd);
+		if (!cmdpath)
+			return (ft_putendl_fd("Memory allocation failed.", STDERR_FILENO), NULL);
 		acc = ft_min(access(cmdpath, F_OK), access(cmdpath, X_OK));
 		i++;
 		if (acc == 0)
@@ -49,5 +51,8 @@ char	*ft_pathname(char *cmd, char **paths)
 		else if (cmdpath)
 			free(cmdpath);
 	}
-	return (NULL);
+	cmdpath = strdup("");
+	if (!cmdpath)
+		return (ft_putendl_fd("Memory allocation failed.", 2), NULL);
+	return (cmdpath);
 }

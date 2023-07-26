@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 11:23:10 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/10 12:52:14 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/18 16:38:59 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**ft_appendtoarr(char **arr, char **app)
 	lenapp = ft_arrlen(app);
 	newarr = malloc((lenarr + lenapp + 1) * sizeof(char *));
 	if (!newarr)
-		return (free(app), arr);
+		return (ft_freearr(app), ft_freearr(arr), NULL);
 	i = 0;
 	while (i < lenarr)
 	{
@@ -58,7 +58,7 @@ char	**ft_appendtoarr(char **arr, char **app)
 
 /* This function extracts the part of the string between " or ' characters and
  appends it to the array of strings arrstr. */
-char	**ft_getstring(char **str, char **arrstr)
+/* char	**ft_getstring(char **str, char **arrstr)
 {
 	int		i;
 	char	*substr;
@@ -80,13 +80,13 @@ char	**ft_getstring(char **str, char **arrstr)
 	}
 	(*str) = (*str) + i + 1;
 	return (arrstr);
-}
+} */
 
 /* This function splits a given string into an array of strings which are the
  part of the original string in between two c characters (or the begining of
  end of the srting) but does not split the parts of the string in between " or
  ' characters. */
-char	**ft_splitnotstr(char *str, char c)
+/* char	**ft_splitnotstr(char *str, char c)
 {
 	int		i;
 	char	*substr;
@@ -111,4 +111,4 @@ char	**ft_splitnotstr(char *str, char c)
 			arrstr = ft_getstring(&str, arrstr);
 	}
 	return (arrstr);
-}
+} */

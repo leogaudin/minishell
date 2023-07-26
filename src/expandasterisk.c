@@ -6,20 +6,17 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 08:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/18 08:26:53 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/07/26 13:33:28 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /**
- * @param filename : name of the file that we want to match with a certain
- *  pattern.
- * @param pattern : pattern we want to try and find in the name of a file.
+ * @param 
+ * @param 
  * 
- * We first split the pattern into its parts separated by '*'. Then we use the
- *  function ft_strnstr to see if the different parts of the pattern can be
- *  found in the given name in the order that they appear in the pattern.
+ * 
  */
 int	ft_patternfound(char *filename, char **pattern_pieces, int *ast)
 {
@@ -50,14 +47,29 @@ int	ft_patternfound(char *filename, char **pattern_pieces, int *ast)
 	return (1);
 }
 
+char	**ft_addfilename_to_arr(char **files, char *filename, DIR *dirp)
+{
+	char			*filename_dup;
+
+	filename_dup = ft_strdup(filename);
+	if (!filename_dup)
+	{
+		ft_putendl_fd("Minishell: Memory allocation failed.", 2);
+		return (ft_freearr(files), NULL);
+	}
+	files = ft_arrapp(files, filename_dup);
+	if (!files)
+	{
+		closedir(dirp);
+		return (NULL);
+	}
+	return (files);
+}
+
 /**
- * @param pattern : the pattern we are looking for in the filenames of the
- *  current directory.
+ * @param pattern : 
  * 
- * We use the functions opendir, readir and closedir to find the files and
- *  directories in the current directory that have a name that matches with the
- *  pattren passed to the function as argument. The names of files and
- *  directories that match are put in an array and returned by the function.
+ * 
  */
 char	**ft_expandasterisk(char **pattern_pieces, int *ast)
 {
@@ -66,17 +78,26 @@ char	**ft_expandasterisk(char **pattern_pieces, int *ast)
 	char			*filename;
 	struct dirent	*result;
 
+	if (pattern_pieces == NULL)
+		return (NULL);
 	dirp = opendir(".");
 	result = readdir(dirp);
-	files = NULL;
+	files = ft_calloc(1, sizeof(char *));
+	if (!files)
+		return (ft_freearr(pattern_pieces), files);
 	while (result != NULL)
 	{
 		filename = result->d_name;
 		if (ft_patternfound(filename, pattern_pieces, ast) == 1)
-			files = ft_arrapp(files, filename);
+		{
+			files = ft_addfilename_to_arr(files, filename, dirp);
+			if (!files)
+				return (NULL);
+		}
 		result = readdir(dirp);
 	}
 	closedir(dirp);
+	ft_freearr(pattern_pieces);
 	return (files);
 }
 
@@ -107,7 +128,7 @@ int	ft_getlenast(char *str, int i)
 	return (len);
 }
 
-char **ft_pattern_pieces(char *str, int *ast)
+char	**ft_pattern_pieces(char *str, int *ast)
 {
 	int		i;
 	int		len;
@@ -127,10 +148,27 @@ char **ft_pattern_pieces(char *str, int *ast)
 		{
 			piece = ft_strip_quotes(ft_substr(&str[i], 0, len));
 			pattern_pieces = ft_arrapp(pattern_pieces, piece);
+			if (!pattern_pieces)
+				return (NULL);
 		}
 		i += len;
 		while (str[i] == '*')
 			i++;
+	}
+	if (!pattern_pieces)
+	{
+		piece = strdup("");
+		if (!piece)
+		{
+			ft_putendl_fd("Minishell: Memory allocation failed.", 2);
+			return (NULL);
+		}
+		pattern_pieces = ft_arrapp(pattern_pieces, piece);
+		if (!pattern_pieces)
+		{
+			ft_putendl_fd("Minishell: Memory allocation failed.", 2);
+			return (NULL);
+		}
 	}
 	return (pattern_pieces);
 }

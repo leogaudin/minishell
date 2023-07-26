@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/18 15:41:07 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/07/19 16:23:38 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_node	*create_node(char *operator, char * operand)
 	new_node = (t_node *)malloc(sizeof(t_node));
 	if (new_node == NULL)
 		return (ft_malloc_error());
-	new_node->operator= operator;
+	new_node->operator = operator;
 	new_node->operand = operand;
 	new_node->left = NULL;
 	new_node->right = NULL;
