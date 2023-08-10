@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 09:08:11 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/26 12:45:54 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/08 12:02:10 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ int	execute_command(const char *command)
  * @param    left_status The exit status of the left child node.
  * @return   int         The exit status of the executed node.
  */
-int	execute_operator_node(t_node *node, int left_status, char ***env, t_node *root)
+int	execute_operator_node(t_node *node, int left_status, char ***env, t_node *r)
 {
 	if (ft_strcmp(node->operator, "&&") == 0 && left_status == 0)
-		return (execute_node(node->right, env, root));
+		return (execute_node(node->right, env, r));
 	else if (ft_strcmp(node->operator, "||") == 0 && left_status != 0)
-		return (execute_node(node->right, env, root));
+		return (execute_node(node->right, env, r));
 	return (left_status);
 }
 

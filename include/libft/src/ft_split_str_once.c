@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_str_once.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 13:01:52 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/18 15:10:13 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/08 11:59:29 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	**ft_split_str_once(char const *s, char *token)
 	{
 		result[0] = ft_substr(s, 0, string_length(s, token));
 		result[1] = ft_substr(s, string_length(s, token)
-					+ ft_strlen(token), ft_strlen(s) - ft_strlen(result[0]));
+				+ ft_strlen(token), ft_strlen(s) - ft_strlen(result[0]));
 	}
 	result[2] = 0;
 	return (result);

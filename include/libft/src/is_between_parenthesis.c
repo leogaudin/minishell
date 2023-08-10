@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_between_parenthesis.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 20:06:41 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/17 20:32:59 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/08 12:00:24 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_between_parenthesis(char *str, int index)
 {
-	int		i;
+	int	i;
 	int	opened_parenthesis;
 	int	closing_parenthesis;
 

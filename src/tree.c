@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/19 16:23:38 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/08 09:16:01 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ t_node	*generate_node_from_command(const char *command)
 	root = NULL;
 	token = NULL;
 	commands = NULL;
-	if (exists_out_parenthesis((char *)command, "||"))
+	if (exists_out_parenthesis((char *)command, "||"))//this should actually just be the one it encounters first unless parenthesis.
 		token = "||";
 	else if (exists_out_parenthesis((char *)command, "&&"))
 		token = "&&";

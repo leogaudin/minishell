@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 08:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/26 13:33:28 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/09 12:50:06 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_patternfound(char *filename, char **pattern_pieces, int *ast)
 	found = filename;
 	while (found && *found && pattern_pieces[m])
 	{
-		if ((m == 0 && ast[0] == 0) && ft_strncmp(filename, pattern_pieces[m],\
+		if ((m == 0 && ast[0] == 0) && ft_strncmp(filename, pattern_pieces[m], \
 			ft_strlen(pattern_pieces[m])))
 			return (0);
 		else if ((pattern_pieces[m + 1] == NULL && ast[1] == 0) && \
@@ -92,13 +92,12 @@ char	**ft_expandasterisk(char **pattern_pieces, int *ast)
 		{
 			files = ft_addfilename_to_arr(files, filename, dirp);
 			if (!files)
-				return (NULL);
+				return (ft_freearr(pattern_pieces), NULL);
 		}
 		result = readdir(dirp);
 	}
 	closedir(dirp);
-	ft_freearr(pattern_pieces);
-	return (files);
+	return (ft_freearr(pattern_pieces), files);
 }
 
 int	ft_getlenast(char *str, int i)
@@ -137,10 +136,7 @@ char	**ft_pattern_pieces(char *str, int *ast)
 
 	i = 0;
 	pattern_pieces = NULL;
-	if (*str == '*')
-		ast[0] = 1;
-	if (str[strlen(str) - 1] == '*')
-		ast[1] = 1;
+	ft_set_ast(str, &ast);
 	while (str[i])
 	{
 		len = ft_getlenast(str, i);
@@ -155,20 +151,6 @@ char	**ft_pattern_pieces(char *str, int *ast)
 		while (str[i] == '*')
 			i++;
 	}
-	if (!pattern_pieces)
-	{
-		piece = strdup("");
-		if (!piece)
-		{
-			ft_putendl_fd("Minishell: Memory allocation failed.", 2);
-			return (NULL);
-		}
-		pattern_pieces = ft_arrapp(pattern_pieces, piece);
-		if (!pattern_pieces)
-		{
-			ft_putendl_fd("Minishell: Memory allocation failed.", 2);
-			return (NULL);
-		}
-	}
+	pattern_pieces = ft_check_empty_pattern(pattern_pieces);
 	return (pattern_pieces);
 }

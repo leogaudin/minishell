@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 11:23:10 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/18 16:38:59 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/08 12:40:33 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,38 +23,6 @@
 		i++;
 	return (i);
 } */
-
-/* This function appends a null terminated array of strings to another null
- terminated array of strings and null therminates the resulting array of
- strings. */
-char	**ft_appendtoarr(char **arr, char **app)
-{
-	char	**newarr;
-	int		lenarr;
-	int		lenapp;
-	int		i;
-
-	if (arr == NULL)
-		return (app);
-	lenarr = ft_arrlen(arr);
-	lenapp = ft_arrlen(app);
-	newarr = malloc((lenarr + lenapp + 1) * sizeof(char *));
-	if (!newarr)
-		return (ft_freearr(app), ft_freearr(arr), NULL);
-	i = 0;
-	while (i < lenarr)
-	{
-		newarr[i] = arr[i];
-		i++;
-	}
-	while (i < lenarr + lenapp)
-	{
-		newarr[i] = app[i - lenarr];
-		i++;
-	}
-	newarr[i] = NULL;
-	return (free(arr), free(app), newarr);
-}
 
 /* This function extracts the part of the string between " or ' characters and
  appends it to the array of strings arrstr. */

@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 08:27:23 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/21 10:20:37 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/10 09:27:57 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*ft_replace(char *line, char *varname, int *pos, char ***env)
 	begin = ft_substr(line, 0, *pos - 1);
 	if (!begin)
 		return (free(line), NULL);
-	var = ft_getenv(varname, *env);//add something for when varname is "?"!!!
+	var = ft_getenv(varname, *env);
 	if (!var)
 		return (free(line), free(begin), NULL);
 	beginvar = ft_strjoin(begin, var);
@@ -50,8 +50,8 @@ char	*ft_replace(char *line, char *varname, int *pos, char ***env)
 		return (free (var), free(line), free(begin), free(beginvar), NULL);
 	beginvarend = ft_strjoin(beginvar, end);
 	*pos = ft_strlen(begin) + ft_strlen (var) -1;
-	return (free (var), free(line), free(begin), free(beginvar), free(end), beginvarend);
-	//return (beginvarend);
+	free(beginvar);
+	return (free (var), free(line), free(begin), free(end), beginvarend);
 }
 
 char	*ft_replacewave(char *line, int *pos, char ***env)
@@ -77,7 +77,8 @@ char	*ft_replacewave(char *line, int *pos, char ***env)
 		return (free (var), free(line), free(begin), free(beginvar), NULL);
 	beginvarend = ft_strjoin(beginvar, end);
 	*pos = ft_strlen(begin) + ft_strlen (var) - 1;
-	return (free (var), free(line), free(begin), free(beginvar), free(end), beginvarend);
+	free(beginvar);
+	return (free (var), free(line), free(begin), free(end), beginvarend);
 }
 
 /**
@@ -111,9 +112,39 @@ char	*ft_getvar_and_replace(int *i, char *expline, char ***env)
 	}
 	if (!var)
 		return (free(expline), NULL);
+	else if (!*var)
+		return ((*i)--, expline);
 	expline = ft_replace(expline, var, i, env);
 	free(var);
 	return (expline);
+}
+
+int	ft_expandvar_loopfunc(char **expline, int *i, t_openq *open, char ***env)
+{
+	if (expline[0][*i] == '\'' && open->opens == 0 && open->opend == 0 && \
+		ft_findchar(&expline[0][*i + 1], '\'') == 1)
+		open->opens = 1;
+	else if (expline[0][*i] == '\'' && open->opens == 1)
+		open->opens = 0;
+	if (expline[0][*i] == '\"' && open->opens == 0 && open->opend == 0 && \
+		ft_findchar(&expline[0][*i + 1], '\"') == 1)
+		open->opend = 1;
+	else if (expline[0][*i] == '\"' && open->opend == 1)
+		open->opend = 0;
+	if (expline[0][*i] == '$' && open->opens != 1)
+	{
+		expline[0] = ft_getvar_and_replace(i, expline[0], env);
+		if (!expline[0])
+			return (-1);
+	}
+	else if (expline[0][*i] == '~' && (expline[0][*i + 1] <= 32 || \
+	expline[0][*i + 1] == '/') && open->opens == 0 && open->opend == 0)
+	{
+		expline[0] = ft_replacewave(expline[0], i, env);
+		if (!expline[0])
+			return (-1);
+	}
+	return (0);
 }
 
 /**
@@ -129,34 +160,17 @@ char	*ft_getvar_and_replace(int *i, char *expline, char ***env)
 char	*ft_expandvar(char *line, char ***env)
 {
 	int		i;
-	int		opens;
-	int		opend;
+	t_openq	open;
 	char	*expline;
 
 	i = -1;
-	opens = 0;
-	opend = 0;
+	open.opens = 0;
+	open.opend = 0;
 	expline = ft_strdup(line);
 	while (expline && expline[++i])
 	{
-		if (expline[i] == '\'' && opens == 0 && opend == 0 && \
-			ft_findchar(&expline[i + 1], '\'') == 1)
-			opens = 1;
-		else if (expline[i] == '\'' && opens == 1)
-			opens = 0;
-		if (expline[i] == '\"' && opens == 0 && opend == 0 && \
-			ft_findchar(&expline[i + 1], '\"') == 1)
-			opend = 1;
-		else if (expline[i] == '\"' && opend == 1)
-			opend = 0;
-		if (expline[i] == '$' && opens != 1)
-		{
-			expline = ft_getvar_and_replace(&i, expline, env);
-			if (!expline)
-				return (free(line), NULL);
-		}
-		else if (expline[i] == '~' && (expline[i + 1] <= 32 || expline[i + 1] == '/') && opens == 0 && opend == 0)
-			expline = ft_replacewave(expline, &i, env);
+		if (ft_expandvar_loopfunc(&expline, &i, &open, env))
+			break ;
 	}
 	free(line);
 	return (expline);

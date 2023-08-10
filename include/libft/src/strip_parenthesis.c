@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   strip_parenthesis.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 09:32:47 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/18 15:12:31 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/08 12:01:10 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char	*strip_parenthesis(char *str)
 {
-	int i;
-	int start;
-	int end;
-	char *new;
+	int		i;
+	int		start;
+	int		end;
+	char	*new;
 
 	i = 0;
 	start = 0;

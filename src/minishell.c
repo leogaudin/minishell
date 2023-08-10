@@ -6,13 +6,14 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/07/26 12:46:49 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/08 09:17:25 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 int g_exit_code = 0;
+//int g_other = 0;
 
 // INFO: This function is not part of the project, it is only used to test the
 // AST generation and execution.
@@ -66,27 +67,30 @@ void sigint_handler(int sig)
 	//char	c;
 
 	(void)sig;
-	if (g_exit_code == -14)
-	{
-		//c = 4;
-		//write(1, &c, 1);
-		//write(1, "\b\b\033[K\n", 5);
-		write(1, "\n", 1);
-	}
-	else if (g_exit_code == -15)
+	// if (g_other == -14)
+	// {
+	// 	//c = 4;
+	// 	//write(1, &c, 1);
+	// 	write(1, "\b\b\033[K\n", 5);
+	// 	//rl_on_new_line();
+	// 	//rl_redisplay();
+	// 	//rl_replace_line("", 0);
+	// }
+	/* else if (g_exit_code == -15)
 	{
 		write(1, "\b\b\033[K", 5);
-	}
-	else
-	{
+	} */
+	//else
+	//{
 		rl_on_new_line();
 		rl_redisplay();
-		write(1, "\b\033[K\n", 5);
+		rl_replace_line("", 0);
+		write(1, "\033[K\n", 5);
 		rl_on_new_line();
 		rl_redisplay();
 		//ft_putchar_fd('\n', 1);
 		//rl_replace_line("", 0);
-	}
+	//}
 }
 
 void	sigquit_handler(int sig)
@@ -124,10 +128,21 @@ int	ft_changeshlvl(char ***env)
 	return (0);
 }
 
+void	ft_dothingswithline(char *line, char ***env)
+{
+	t_node	*root;
+	int		exit_code;
+
+	add_history(line);
+	root = generate_node_from_command(line);
+	exit_code = execute_node(root, env, root);
+	destroy_node(root);
+	free(line);
+}
+
 int main(int argc, char **argv, char **env)
 {
 	char	*line;
-	t_node	*root;
 
 	(void)argc;
 	(void)argv;
@@ -137,26 +152,19 @@ int main(int argc, char **argv, char **env)
 	if (ft_changeshlvl(&env))
 		return (g_exit_code);
 	signal(SIGINT, sigint_handler);
-	//signal(SIGQUIT, sigquit_handler);
 	signal(SIGQUIT, SIG_IGN);
-	//env = ft_arrremove(env, ft_existenv("SHLVL", env));
 	while (1)
 	{
 		line = readline(ft_prompt());
 		if (!line)
 		{
 			rl_clear_history();
-			ft_freearr(env);
-			exit(g_exit_code);
+			//ft_freearr(env);
+			ft_exit(ft_strdup("exit"), &env);//use NULL instead of strdup and change ft_exit accordingly
+			//exit(g_exit_code);
 		}
 		if (line && *line)
-		{
-			add_history(line);
-			root = generate_node_from_command(line);
-			g_exit_code = execute_node(root, &env, root);
-			destroy_node(root);
-			free(line);
-		}
+			ft_dothingswithline(line, &env);
 	}
 	return (g_exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:34:22 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/07/19 12:17:51 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/10 08:50:46 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,24 @@ void	ft_frall(char **arrstr, int **fds, int i)
 {
 	ft_frfds(fds, i);
 	ft_freesplit(arrstr);
+}
+
+void	ft_freecmds(t_cmd *cmds, int n)
+{
+	int	i;
+
+	i = 0;
+	while (i < n)
+	{
+		if (cmds[i].rein.rein == 1 && cmds[i].rein.infile)
+			free(cmds[i].rein.infile);
+		if (cmds[i].rein.herein == 1 && cmds[i].rein.heredel)
+			free(cmds[i].rein.heredel);
+		if ((cmds[i].reout.reout == 1 || cmds[i].reout.reoutapp == 1) \
+			&& cmds[i].reout.outfile)
+			free(cmds[i].reout.outfile);
+		free(cmds[i].cmdarg);
+		i++;
+	}
+	free(cmds);
 }
