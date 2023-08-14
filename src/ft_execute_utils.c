@@ -6,13 +6,13 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 07:33:23 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/09 07:33:47 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/11 10:43:16 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	**ft_execfdpairs(int cmdct)
+int	**ft_execfdpairs(int cmdct, t_gen_info *info)
 {
 	int	i;
 	int	**fds;
@@ -21,7 +21,7 @@ int	**ft_execfdpairs(int cmdct)
 		return (NULL);
 	fds = malloc((cmdct - 1) * sizeof(int *));
 	if (!fds)
-		return (ft_putstrerror("malloc: "), NULL);
+		return (ft_putstrerror("malloc: ", info), NULL);
 	if (fds)
 	{
 		i = 0;
@@ -29,7 +29,7 @@ int	**ft_execfdpairs(int cmdct)
 		{
 			fds[i] = malloc(2 * sizeof(int));
 			if (!fds[i])
-				return (ft_putstrerror("malloc: "), ft_frfds(fds, i), NULL);
+				return (ftme(info), ft_frfds(fds, i), NULL);
 			i++;
 		}
 	}
@@ -75,4 +75,30 @@ int	ft_execcloseall(int **fd, int pipect)
 		}
 	}
 	return (0);
+}
+
+int	fd_dupin(int fdin, t_gen_info *info)
+{
+	if (fdin < 0)
+		return (ft_putstrerror("open: ", info), -1);
+	if (dup2(fdin, STDIN_FILENO) < 0)
+		return (ft_putstrerror("dup2: ", info), -1);
+	close(fdin);
+	return (0);
+}
+
+void	ft_exportlastarg(char **argums, t_gen_info *info)
+{
+	int		len;
+	char	*last;
+	int		pos;
+
+	len = ft_arrlen(argums);
+	last = argums[len - 1];
+	pos = ft_existenv("_", info);
+	if (pos >= 0)
+	{
+		free(info->env[pos]);
+		info->env[pos] = ft_strjoin("_=", last);
+	}
 }

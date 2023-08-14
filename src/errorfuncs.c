@@ -6,16 +6,16 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 09:19:52 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/10 09:11:13 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/10 14:49:16 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	ft_putstrerror(char *str)
+void	ft_putstrerror(char *str, t_gen_info *info)
 {
-	g_exit_code = errno;
-	printf("g_exit_code now is -> %i", g_exit_code);
+	info->exit_code = errno;
+	//printf("g_exit_code now is -> %i", g_exit_code);
 	write(2, "Minishell: ", ft_strlen("Minishell: "));
 	if (str)
 	{
@@ -26,7 +26,7 @@ void	ft_putstrerror(char *str)
 
 void	ft_puterror(char *error, int code, char *str1, char *str2)
 {
-	g_exit_code = code;
+	(void)code;//remove at some point please
 	write(2, "Minishell: ", ft_strlen("Minishell: "));
 	if (str1)
 		write(2, str1, ft_strlen(str1));
@@ -34,4 +34,21 @@ void	ft_puterror(char *error, int code, char *str1, char *str2)
 		write(2, str2, ft_strlen(str2));
 	write(2, error, ft_strlen(error));
 	write(2, "\n", 1);
+}
+
+int	ft_put_error(char *error, int code, char *str1, char *str2)
+{
+	write(2, "Minishell: ", ft_strlen("Minishell: "));
+	if (str1)
+		write(2, str1, ft_strlen(str1));
+	if (str2)
+		write(2, str2, ft_strlen(str2));
+	write(2, error, ft_strlen(error));
+	write(2, "\n", 1);
+	return (code);
+}
+
+void	ftme(t_gen_info *info)
+{
+	ft_putstrerror("malloc: ", info);
 }

@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 08:49:52 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/10 08:54:22 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/12 10:14:51 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	ft_findcharout(char *str, char c)
 	return (0);
 }
 
-char	*ft_straddfree(char *str, char chr)
+char	*ft_straddfree(char *str, char chr, t_gen_info *info)
 {
 	char	*new;
 	int		len;
@@ -65,7 +65,7 @@ char	*ft_straddfree(char *str, char chr)
 	new = malloc((len + 2) * sizeof(char));
 	if (!new)
 	{
-		ft_putendl_fd("Memory allocation failed.", STDERR_FILENO);
+		ft_putstrerror("malloc: ", info);
 		return (NULL);
 	}
 	i = 0;

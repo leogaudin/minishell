@@ -6,33 +6,36 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 08:57:05 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/10 09:51:08 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/13 13:40:39 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_addwhilenotchar(char *line, char *name, int *len, char c)
+int	ft_addwhilenotchar(char *line, char **name, char c, t_gen_info *info)
 {
-	name = ft_straddfree(name, line[*len]);
-	if (!name)
-		return (NULL);
-	(*len)++;
-	while (line[*len] != c)
+	int	len;
+
+	len = 0;
+	*name = ft_straddfree(*name, line[len], info);
+	if (!*name)
+		return (0);
+	len++;
+	while (line[len] != c)
 	{
-		name = ft_straddfree(name, line[*len]);
-		if (!name)
-			return (NULL);
-		(*len)++;
+		*name = ft_straddfree(*name, line[len], info);
+		if (!*name)
+			return (0);
+		len++;
 	}
-	name = ft_straddfree(name, line[*len]);
-	if (!name)
-		return (NULL);
-	(*len)++;
-	return (name);
+	*name = ft_straddfree(*name, line[len], info);
+	if (!*name)
+		return (0);
+	len++;
+	return (len);
 }
 
-char	*ft_getstr(char *line, int *len)
+char	*ft_getstr(char *line, int *len, t_gen_info *info)
 {
 	char	*name;
 
@@ -40,12 +43,12 @@ char	*ft_getstr(char *line, int *len)
 	while ((line[*len] > 32) && (line[*len] != '<' && line[*len] != '>'))
 	{
 		if (line[*len] == '\"' && ft_findchar(&line[*len + 1], '\"'))
-			name = ft_addwhilenotchar(line, name, len, '\"');
+			*len += ft_addwhilenotchar(line + *len, &name, '\"', info);
 		else if (line[*len] == '\'' && ft_findchar(&line[*len + 1], '\''))
-			name = ft_addwhilenotchar(line, name, len, '\'');
+			*len += ft_addwhilenotchar(line + *len, &name, '\'', info);
 		else
 		{
-			name = ft_straddfree(name, line[*len]);
+			name = ft_straddfree(name, line[*len], info);
 			(*len)++;
 		}
 		if (!name)
@@ -74,7 +77,7 @@ void	ft_skip_name(char *line, int *i)
 		(*i)++;
 }
 
-char	*ft_get_cmdarg(char *line)
+char	*ft_get_cmdarg(char *line, t_gen_info *info)
 {
 	int		i;
 	char	*new;
@@ -87,10 +90,9 @@ char	*ft_get_cmdarg(char *line)
 	{
 		while (line[i] && line[i] != '<' && line[i] != '>')
 		{
-			new = ft_straddfree(new, line[i]);
+			ft_get_chars(line, &i, &new, info);
 			if (!new)
 				return (NULL);
-			i++;
 		}
 		if (line[i] == '<' || line[i] == '>')
 		{
@@ -103,7 +105,7 @@ char	*ft_get_cmdarg(char *line)
 	return (new);
 }
 
-t_cmd	*ft_initcmds(char **blocksep, t_cmd *cmds)
+t_cmd	*ft_initcmds(char **blocksep, t_cmd *cmds, t_gen_info *info)
 {
 	int	i;
 	int	j;
@@ -118,7 +120,7 @@ t_cmd	*ft_initcmds(char **blocksep, t_cmd *cmds)
 		cmds[i].reout.reoutapp = 0;
 		cmds[i].reout.reout = 0;
 		cmds[i].reout.outfile = NULL;
-		cmds[i].cmdarg = ft_get_cmdarg(blocksep[i]);
+		cmds[i].cmdarg = ft_get_cmdarg(blocksep[i], info);
 		if (!cmds[i].cmdarg)
 		{
 			j = 0;

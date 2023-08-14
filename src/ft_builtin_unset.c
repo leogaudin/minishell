@@ -6,52 +6,51 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 11:04:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/08 11:21:58 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/11 08:59:21 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_unset_checkname(t_fullcmd fullcmd, int i, int *len)
+int	ft_unset_checkname(t_fullcmd fullcmd, int i, int *len, t_gen_info *info)
 {
 	while (fullcmd.argums[i][++(*len)])
 	{
 		if (ft_isalnum(fullcmd.argums[i][(*len)]) == 0
 			&& fullcmd.argums[i][(*len)] != '_')
 		{
-			ft_puterror(": not a valid identifier", 1, "export: ", \
-			fullcmd.argums[i]);
+			info->exit_code = ft_put_error(": not a valid identifier", 1, \
+			"unset: ", fullcmd.argums[i]);
 			return (1);
 		}
 	}
 	return (0);
 }
 
-int	ft_unset(t_fullcmd fullcmd, char ***env)
+int	ft_unset(t_fullcmd fullcmd, t_gen_info *info)
 {
 	int		i;
-	int		ok;
 	int		len;
 	int		varpos;
 	char	*varname;
 
 	i = 0;
+	info->exit_code = 0;
 	while (fullcmd.argums[++i])
 	{
 		len = -1;
-		ok = ft_unset_checkname(fullcmd, i, &len);
-		if (ok == 0)
+		if (ft_unset_checkname(fullcmd, i, &len, info) == 0)
 		{
 			varname = ft_substr(fullcmd.argums[i], 0, len);
 			if (!varname)
-				return (ft_putstrerror("malloc: "), g_exit_code);
-			varpos = ft_existenv(varname, *env);
+				return (ft_putstrerror("malloc: ", info), info->exit_code);
+			varpos = ft_existenv(varname, info);
 			free(varname);
-			*env = ft_arrremove(*env, varpos);//cmt1
-			if (!*env)
-				return (g_exit_code);
+			info->env = ft_arrremove(info->env, varpos, info);//cmt1
+			if (!info->env)
+				return (info->exit_code);
 		}
 	}
-	return (0);
+	return (info->exit_code);
 }
 //cmt1: what if null, because then no more env

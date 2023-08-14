@@ -6,13 +6,13 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 11:18:42 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/09 12:49:33 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/10 13:22:53 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	**ft_check_empty_pattern(char **pattern_pieces)
+char	**ft_check_empty_pattern(char **pattern_pieces, t_gen_info *info)
 {
 	char	*piece;
 
@@ -21,10 +21,10 @@ char	**ft_check_empty_pattern(char **pattern_pieces)
 		piece = strdup("");
 		if (!piece)
 		{
-			ft_putendl_fd("Minishell: Memory allocation failed.", 2);
+			ft_putstrerror("malloc: ", info);
 			return (NULL);
 		}
-		pattern_pieces = ft_arrapp(pattern_pieces, piece);
+		pattern_pieces = ft_arrapp(pattern_pieces, piece, info);
 	}
 	return (pattern_pieces);
 }

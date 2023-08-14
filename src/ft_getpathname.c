@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:37:27 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/09 13:33:42 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/11 09:50:07 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_min(int a, int b)
 /* With this function, we check whether the command cmd exists in one of the
  paths stored as strings in the variable paths and if we have the right
  permissions to execute it. */
-char	*ft_pathname(char *cmd, char **paths, int acc)
+char	*ft_pathname(char *cmd, char **paths, int acc, t_gen_info *info)
 {
 	int		i;
 	char	*cmdpath;
@@ -41,7 +41,7 @@ char	*ft_pathname(char *cmd, char **paths, int acc)
 	{
 		cmdpath = ft_strjoin(paths[i], cmd);
 		if (!cmdpath)
-			return (ft_putstrerror("malloc: "), NULL);
+			return (ft_putstrerror("malloc: ", info), NULL);
 		acc = ft_min(access(cmdpath, F_OK), access(cmdpath, X_OK));
 		if (acc == 0)
 			return (cmdpath);
@@ -50,33 +50,38 @@ char	*ft_pathname(char *cmd, char **paths, int acc)
 	}
 	cmdpath = strdup("");
 	if (!cmdpath)
-		return (ft_putstrerror("malloc: "), NULL);
+		return (ft_putstrerror("malloc: ", info), NULL);
 	return (cmdpath);
 }
 
-char	*ft_execpathname2(char *cmd, char **paths, char *pathvar, int off)
+char	*ft_execpathname2(char *cmd, char **paths, int off, t_gen_info *info)
 {
 	char	*cmdpath;
 	int		e;
 	int		acc;
 
 	acc = 0;
-	cmdpath = ft_pathname(cmd, paths, acc);
+	cmdpath = ft_pathname(cmd, paths, acc, info);
 	e = 127;
 	if (cmdpath && !*cmdpath)
 	{
 		if (off == 0)
+		{
 			ft_puterror(": command not found", e, cmd + (++off), NULL);
+			info->exit_code = e;
+		}
 		else
+		{
 			ft_puterror(": no such file or directory", e, cmd + (++off), NULL);
+			info->exit_code = e;
+		}
 	}
 	free(cmd);
-	free(pathvar);
 	ft_freesplit(paths);
 	return (cmdpath);
 }
 
-char	*ft_execgetpathname(char *cmd, char ***env)
+char	*ft_execgetpathname(char *cmd, t_gen_info *info)
 {
 	int		i;
 	char	**paths;
@@ -93,13 +98,14 @@ char	*ft_execgetpathname(char *cmd, char ***env)
 	if (ft_findchar(cmd, '/') == 0)
 		cmd = ft_strjoinfree("/", cmd, 2);
 	if (!cmd)
-		return (ft_putstrerror("malloc: "), NULL);
-	pathvar = ft_getenv("PATH", *env);
+		return (ftme(info), NULL);
+	pathvar = ft_getenv("PATH", info);
 	if (!pathvar)
-		return (free(cmd), ft_putstrerror("malloc: "), NULL);
+		return (free(cmd), ftme(info), NULL);
 	paths = ft_split(pathvar, ':');
 	if (!paths)
-		return (free(cmd), free(pathvar), ft_putstrerror("malloc: "), NULL);
-	cmdpath = ft_execpathname2(cmd, paths, pathvar, off);
+		return (free(cmd), free(pathvar), ftme(info), NULL);
+	cmdpath = ft_execpathname2(cmd, paths, off, info);
+	free(pathvar);
 	return (cmdpath);
 }

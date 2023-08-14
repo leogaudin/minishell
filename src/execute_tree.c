@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 09:08:11 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/08 12:02:10 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/10 11:47:19 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ int	execute_command(const char *command)
  * @param    left_status The exit status of the left child node.
  * @return   int         The exit status of the executed node.
  */
-int	execute_operator_node(t_node *node, int left_status, char ***env, t_node *r)
+int	execute_operator_node(t_node *node, int left_status, t_gen_info *info)
 {
 	if (ft_strcmp(node->operator, "&&") == 0 && left_status == 0)
-		return (execute_node(node->right, env, r));
+		return (execute_node(node->right, info));
 	else if (ft_strcmp(node->operator, "||") == 0 && left_status != 0)
-		return (execute_node(node->right, env, r));
+		return (execute_node(node->right, info));
 	return (left_status);
 }
 
@@ -97,9 +97,9 @@ int	execute_operator_node(t_node *node, int left_status, char ***env, t_node *r)
 	}
 } */
 
-int	execute_operand_node(t_node *node, char ***env, t_node *root)
+int	execute_operand_node(t_node *node, t_gen_info *info)
 {
-	if (ft_parseandexec(node->operand, env, root))
+	if (ft_parseandexec(node->operand, info))
 		return (-1);
 	return (0);
 }
@@ -116,7 +116,7 @@ int	execute_operand_node(t_node *node, char ***env, t_node *root)
  * @param    node      The node to execute.
  * @return   int       The exit status of the executed node.
  */
-int	execute_node(t_node *node, char ***env, t_node *root)
+int	execute_node(t_node *node, t_gen_info *info)
 {
 	int	left_status;
 
@@ -124,9 +124,9 @@ int	execute_node(t_node *node, char ***env, t_node *root)
 		return (0);
 	if (node->operator)
 	{
-		left_status = execute_node(node->left, env, root);
-		return (execute_operator_node(node, left_status, env, root));
+		left_status = execute_node(node->left, info);
+		return (execute_operator_node(node, left_status, info));
 	}
 	else
-		return (execute_operand_node(node, env, root));
+		return (execute_operand_node(node, info));
 }

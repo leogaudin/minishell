@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 08:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/09 12:50:06 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/10 13:32:10 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,46 +18,46 @@
  * 
  * 
  */
-int	ft_patternfound(char *filename, char **pattern_pieces, int *ast)
+int	ft_patternfound(char *filename, char **pieces, int *ast)
 {
 	int		m;
 	char	*found;
 
 	m = 0;
 	found = filename;
-	while (found && *found && pattern_pieces[m])
+	while (found && *found && pieces[m])
 	{
-		if ((m == 0 && ast[0] == 0) && ft_strncmp(filename, pattern_pieces[m], \
-			ft_strlen(pattern_pieces[m])))
+		if ((m == 0 && ast[0] == 0) && ft_strncmp(filename, pieces[m], \
+			ft_strlen(pieces[m])))
 			return (0);
-		else if ((pattern_pieces[m + 1] == NULL && ast[1] == 0) && \
-				(ft_strlen(filename) - ft_strlen(pattern_pieces[m]) < 0 || \
+		else if ((pieces[m + 1] == NULL && ast[1] == 0) && \
+				(ft_strlen(filename) - ft_strlen(pieces[m]) < 0 || \
 				ft_strncmp(&filename[ft_strlen(filename) - \
-				ft_strlen(pattern_pieces[m])], pattern_pieces[m], \
-				ft_strlen(pattern_pieces[m]))))
+				ft_strlen(pieces[m])], pieces[m], \
+				ft_strlen(pieces[m]))))
 			return (0);
-		found = ft_strnstr(found, pattern_pieces[m], ft_strlen(found));
+		found = ft_strnstr(found, pieces[m], ft_strlen(found));
 		if (found == NULL)
 			return (0);
-		found = found + ft_strlen(pattern_pieces[m]);
+		found = found + ft_strlen(pieces[m]);
 		m++;
 	}
-	if (pattern_pieces[m] != NULL)
+	if (pieces[m] != NULL)
 		return (0);
 	return (1);
 }
 
-char	**ft_addfilename_to_arr(char **files, char *filename, DIR *dirp)
+char	**ft_addfile_arr(char **files, char *file, DIR *dirp, t_gen_info *info)
 {
-	char			*filename_dup;
+	char			*file_dup;
 
-	filename_dup = ft_strdup(filename);
-	if (!filename_dup)
+	file_dup = ft_strdup(file);
+	if (!file_dup)
 	{
-		ft_putendl_fd("Minishell: Memory allocation failed.", 2);
+		ft_putstrerror("malloc: ", info);
 		return (ft_freearr(files), NULL);
 	}
-	files = ft_arrapp(files, filename_dup);
+	files = ft_arrapp(files, file_dup, info);
 	if (!files)
 	{
 		closedir(dirp);
@@ -71,33 +71,33 @@ char	**ft_addfilename_to_arr(char **files, char *filename, DIR *dirp)
  * 
  * 
  */
-char	**ft_expandasterisk(char **pattern_pieces, int *ast)
+char	**ft_expandasterisk(char **pieces, int *ast, t_gen_info *info)
 {
 	DIR				*dirp;
 	char			**files;
 	char			*filename;
 	struct dirent	*result;
 
-	if (pattern_pieces == NULL)
+	if (pieces == NULL)
 		return (NULL);
 	dirp = opendir(".");
 	result = readdir(dirp);
 	files = ft_calloc(1, sizeof(char *));
 	if (!files)
-		return (ft_freearr(pattern_pieces), files);
+		return (ft_freearr(pieces), ft_putstrerror("malloc: ", info), files);
 	while (result != NULL)
 	{
 		filename = result->d_name;
-		if (ft_patternfound(filename, pattern_pieces, ast) == 1)
+		if (ft_patternfound(filename, pieces, ast) == 1)
 		{
-			files = ft_addfilename_to_arr(files, filename, dirp);
+			files = ft_addfile_arr(files, filename, dirp, info);
 			if (!files)
-				return (ft_freearr(pattern_pieces), NULL);
+				return (ft_freearr(pieces), NULL);
 		}
 		result = readdir(dirp);
 	}
 	closedir(dirp);
-	return (ft_freearr(pattern_pieces), files);
+	return (ft_freearr(pieces), files);
 }
 
 int	ft_getlenast(char *str, int i)
@@ -127,7 +127,7 @@ int	ft_getlenast(char *str, int i)
 	return (len);
 }
 
-char	**ft_pattern_pieces(char *str, int *ast)
+char	**ft_pattern_pieces(char *str, int *ast, t_gen_info *info)
 {
 	int		i;
 	int		len;
@@ -143,7 +143,7 @@ char	**ft_pattern_pieces(char *str, int *ast)
 		if (len)
 		{
 			piece = ft_strip_quotes(ft_substr(&str[i], 0, len));
-			pattern_pieces = ft_arrapp(pattern_pieces, piece);
+			pattern_pieces = ft_arrapp(pattern_pieces, piece, info);
 			if (!pattern_pieces)
 				return (NULL);
 		}
@@ -151,6 +151,6 @@ char	**ft_pattern_pieces(char *str, int *ast)
 		while (str[i] == '*')
 			i++;
 	}
-	pattern_pieces = ft_check_empty_pattern(pattern_pieces);
+	pattern_pieces = ft_check_empty_pattern(pattern_pieces, info);
 	return (pattern_pieces);
 }

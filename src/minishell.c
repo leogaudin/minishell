@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/08 09:17:25 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/12 09:31:44 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int g_exit_code = 0;
 	return (0);
 } */
 
-char	**ft_arrdup(char **arr)
+char	**ft_arrdup(char **arr, t_gen_info *info)
 {
 	int		i;
 	int		j;
@@ -44,22 +44,28 @@ char	**ft_arrdup(char **arr)
 		i++;
 	new = malloc((i + 1) * sizeof(char *));
 	if (!new)
-		return (ft_putendl_fd("Memory allocation failed.", STDERR_FILENO), NULL);
+		return (ft_putstrerror("malloc: ", info), NULL);
 	j = 0;
 	while (j < i)
 	{
 		new[j] = ft_strdup(arr[j]);
 		if (!new[j])
-			return (ft_freearr(new), ft_putendl_fd("Memory allocation failed.", STDERR_FILENO), NULL);
+			return (ft_freearr(new), ft_putstrerror("malloc: ", info), NULL);
 		j++;
 	}
 	new[j] = NULL;
 	return (new);
 }
 
-char *ft_prompt(void)
+char	*ft_prompt(t_gen_info *info)
 {
-	return ("\033[0;32mminishell!> \033[0m");
+	char	*user;
+
+	user = ft_getenv("USER", info);
+	info->prompt = ft_strjoinfree(user, " > \033[0m", 1);
+	info->prompt = ft_strjoinfree("\033[1;32mminishell\033[0m\033[1;34m@\033[0m\
+\033[1;32m", info->prompt, 2);
+	return (info->prompt);
 }
 
 void sigint_handler(int sig)
@@ -105,66 +111,73 @@ system("lsof  -p $$");
 system("leaks minishell");
 } */
 
-int	ft_changeshlvl(char ***env)
+int	ft_changeshlvl(t_gen_info *info)
 {
 	int		shlvl;
 	int		shlvlpos;
 	char	*shlvlval;
 
-	shlvlval = ft_getenv("SHLVL", *env);
+	shlvlval = ft_getenv("SHLVL", info);
 	if (!shlvlval)
-		return (ft_putendl_fd("Memory allocation failed.", STDERR_FILENO), -1);
+		return (-1);
 	shlvl = ft_atoi(shlvlval) + 1;
-	shlvlpos = ft_existenv("SHLVL", *env);
+	shlvlpos = ft_existenv("SHLVL", info);
 	free(shlvlval);
 	shlvlval = ft_itoa(shlvl);
 	if (!shlvlval)
-		return (ft_putendl_fd("Memory allocation failed.", STDERR_FILENO), -1);
-	free ((*env)[shlvlpos]);
-	(*env)[shlvlpos] = ft_strjoin("SHLVL=", shlvlval);
+		return (ft_putstrerror("malloc: ", info), -1);
+	free ((info->env)[shlvlpos]);
+	info->env[shlvlpos] = ft_strjoin("SHLVL=", shlvlval);
 	free(shlvlval);
-	if (!env[shlvlpos])
-		return (ft_putendl_fd("Memory allocation failed.", STDERR_FILENO), -1);
+	if (!info->env[shlvlpos])
+		return (ft_putstrerror("malloc: ", info), -1);
 	return (0);
 }
 
-void	ft_dothingswithline(char *line, char ***env)
+void	ft_dothingswithline(char *line, t_gen_info *info)
 {
-	t_node	*root;
 	int		exit_code;
 
 	add_history(line);
-	root = generate_node_from_command(line);
-	exit_code = execute_node(root, env, root);
-	destroy_node(root);
+	info->root = generate_node_from_command(line);
+	exit_code = execute_node(info->root, info);
+	destroy_node(info->root);
+	info->root = NULL;
 	free(line);
 }
 
 int main(int argc, char **argv, char **env)
 {
-	char	*line;
+	char		*line;
+	t_gen_info	info;
 
 	(void)argc;
 	(void)argv;
-	env = ft_arrdup(env);
+	info.env = NULL;
+	info.exit_code = 0;
+	info.root = NULL;
+	info.prompt = NULL;
+	env = ft_arrdup(env, &info);
 	if (env == NULL)
-		return (g_exit_code);
-	if (ft_changeshlvl(&env))
-		return (g_exit_code);
+		return (info.exit_code);
+	info.env = env;
+	if (ft_changeshlvl(&info))
+		return (info.exit_code);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		line = readline(ft_prompt());
+		line = readline(ft_prompt(&info));
+		free (info.prompt);
 		if (!line)
 		{
 			rl_clear_history();
 			//ft_freearr(env);
-			ft_exit(ft_strdup("exit"), &env);//use NULL instead of strdup and change ft_exit accordingly
+			ft_exit(ft_strdup("exit"), &info);//use NULL instead of strdup and change ft_exit accordingly
 			//exit(g_exit_code);
 		}
 		if (line && *line)
-			ft_dothingswithline(line, &env);
+			ft_dothingswithline(line, &info);
 	}
 	return (g_exit_code);
 }

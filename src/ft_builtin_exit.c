@@ -6,13 +6,13 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 11:06:05 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/08 11:53:40 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/12 09:53:37 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_exitwitharg(char **argums)
+void	ft_exitwitharg(char **argums, t_gen_info *info)
 {
 	int	i;
 
@@ -27,24 +27,25 @@ void	ft_exitwitharg(char **argums)
 		}
 		i++;
 	}
-	g_exit_code = ft_atoi(argums[1]);
+	info->exit_code = ft_atoi(argums[1]);
 	ft_freearr(argums);
-	exit(g_exit_code);
+	exit((unsigned char) info->exit_code);
 }
 
-void	ft_exit(char *cmd, char ***env)
+void	ft_exit(char *cmd, t_gen_info *info)
 {
 	char	**argums;
 
-	argums = ft_execargums(cmd, env);
+	argums = ft_execargums(cmd, info);
 	free(cmd);
-	ft_freearr(*env);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	if (argums[1] != NULL && argums[2] != NULL)
 		return (ft_freearr(argums), ft_putendl_fd("exit: too many arguments", \
 		STDERR_FILENO), (void)0);
+	ft_freearr(info->env);
+	destroy_node(info->root);
 	if (argums[1] != NULL)
-		ft_exitwitharg(argums);
+		ft_exitwitharg(argums, info);
 	ft_freearr(argums);
-	exit(g_exit_code);
+	exit((unsigned char) info->exit_code);
 }

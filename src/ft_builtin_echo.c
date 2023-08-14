@@ -6,18 +6,19 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 11:00:34 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/08 12:41:59 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/10 14:26:21 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_echo(t_fullcmd fullcmd)
+int	ft_echo(t_fullcmd fullcmd, t_gen_info *info)
 {
 	int	i;
 	int	flag;
 
 	flag = 0;
+	info->exit_code = 0;
 	if (fullcmd.argums[1])
 	{
 		if (!ft_strncmp(fullcmd.argums[1], "-n", ft_strlen(fullcmd.argums[1]))
@@ -33,7 +34,7 @@ int	ft_echo(t_fullcmd fullcmd)
 				write(STDOUT_FILENO, " ", 1);
 		}
 	}
-	if (flag == 0 && write(STDOUT_FILENO, "\n", 1) < 0)
-		return (ft_putstrerror("write: "), g_exit_code);
-	return (g_exit_code);
+	if (flag == 0)
+		write(STDOUT_FILENO, "\n", 1);
+	return (info->exit_code);
 }

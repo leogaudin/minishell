@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 11:07:39 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/08 13:59:22 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/10 13:54:14 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_arrlen(char **arr)
 	return (i);
 }
 
-char	**ft_arrapp(char **arr, char *app)
+char	**ft_arrapp(char **arr, char *app, t_gen_info *info)
 {
 	int		i;
 	char	**newarr;
@@ -33,7 +33,7 @@ char	**ft_arrapp(char **arr, char *app)
 	if (!newarr)
 	{
 		ft_freearr(arr);
-		ft_putendl_fd("Memory allocation failed.", STDERR_FILENO);
+		ft_putstrerror("malloc: ", info);
 	}
 	if (newarr)
 	{
@@ -51,7 +51,7 @@ char	**ft_arrapp(char **arr, char *app)
 	return (newarr);
 }
 
-char	**ft_arrremove(char **env, int pos)
+char	**ft_arrremove(char **env, int pos, t_gen_info *info)
 {
 	char	**new;
 	int		i;
@@ -63,7 +63,7 @@ char	**ft_arrremove(char **env, int pos)
 	new = NULL;
 	new = malloc(len * sizeof(char *));
 	if (!new)
-		return (ft_putstrerror("malloc: "), NULL);
+		return (ft_putstrerror("malloc: ", info), NULL);
 	i = -1;
 	while (++i < pos)
 		new[i] = env[i];
@@ -81,7 +81,7 @@ char	**ft_arrremove(char **env, int pos)
 /* This function appends a null terminated array of strings to another null
  terminated array of strings and null therminates the resulting array of
  strings. */
-char	**ft_appendtoarr(char **arr, char **app)
+char	**ft_appendtoarr(char **arr, char **app, t_gen_info *info)
 {
 	char	**newarr;
 	int		lenarr;
@@ -94,7 +94,7 @@ char	**ft_appendtoarr(char **arr, char **app)
 	lenapp = ft_arrlen(app);
 	newarr = malloc((lenarr + lenapp + 1) * sizeof(char *));
 	if (!newarr)
-		return (ft_freearr(app), ft_freearr(arr), NULL);
+		return (ft_freearr(app), ft_freearr(arr), ftme(info), NULL);
 	i = 0;
 	while (i < lenarr)
 	{
