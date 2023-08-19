@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/19 15:30:43 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 16:03:13 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,33 +70,14 @@ char	*ft_prompt(t_gen_info *info)
 
 void sigint_handler(int sig)
 {
-	//char	c;
-
 	(void)sig;
-	// if (g_other == 1)
-	// {
-	// 	//c = 4;
-	// 	//write(1, &c, 1);
-	// 	write(1, "\b\b\033[K\n", 5);
-	// 	//rl_on_new_line();
-	// 	//rl_redisplay();
-	// 	//rl_replace_line("", 0);
-	// }
-	/* else if (g_exit_code == -15)
-	{
-		write(1, "\b\b\033[K", 5);
-	} */
-	//else
-	//{
-		rl_on_new_line();
-		rl_redisplay();
-		rl_replace_line("", 0);
-		write(1, "\033[K\n", 5);
-		rl_on_new_line();
-		rl_redisplay();
-		//ft_putchar_fd('\n', 1);
-		//rl_replace_line("", 0);
-	//}
+	rl_on_new_line();
+	rl_redisplay();
+	rl_replace_line("", 0);
+	write(1, "\033[K\n", 5);
+	rl_on_new_line();
+	rl_redisplay();
+	rl_replace_line("", 0);
 }
 
 void	sigquit_handler(int sig)
