@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_getpathname.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:37:27 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/11 09:50:07 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 13:02:17 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,12 @@ char	*ft_execpathname2(char *cmd, char **paths, int off, t_gen_info *info)
 
 char	*ft_execgetpathname(char *cmd, t_gen_info *info)
 {
-	int		i;
 	char	**paths;
 	char	*cmdpath;
 	int		off;
 	char	*pathvar;
 
 	off = 0;
-	i = 0;
 	if (cmd && !*cmd)
 		return (cmd);
 	else if (ft_findchar(cmd, '/') != 0)
