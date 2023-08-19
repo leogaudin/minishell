@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/12 09:31:44 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 12:56:51 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void sigint_handler(int sig)
 	//char	c;
 
 	(void)sig;
-	// if (g_other == -14)
+	// if (g_other == 1)
 	// {
 	// 	//c = 4;
 	// 	//write(1, &c, 1);
