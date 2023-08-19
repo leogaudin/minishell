@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/19 13:45:37 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/19 15:30:43 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void	ft_dothingswithline(char *line, t_gen_info *info)
 {
 	add_history(line);
 	info->root = generate_node_from_command(line);
-	info->exit_code = execute_node(info->root, info);
+	execute_node(info->root, info);
 	destroy_node(info->root);
 	info->root = NULL;
 	free(line);
