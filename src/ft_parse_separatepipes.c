@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 08:55:33 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/13 13:41:50 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 14:44:35 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	ft_get_chars(char *line, int *i, char **new, t_gen_info *info)
 	if (line[*i] == '"' && ft_findchar(&line[*i + 1], '\"'))
 		*i += ft_addwhilenotchar(&line[*i], new, '\"', info);
 	else if (line[*i] == '\'' && ft_findchar(&line[*i + 1], '\''))
-		i += ft_addwhilenotchar(&line[*i], new, '\'', info);
+		*i += ft_addwhilenotchar(&line[*i], new, '\'', info);
 	else
 	{
 		*new = ft_straddfree(*new, line[*i], info);
