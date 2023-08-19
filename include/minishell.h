@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/13 13:38:07 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 12:30:05 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,6 +315,7 @@ int			ft_check_redir_inandout(char **separate_pipe, t_gen_info *info);
 int			ft_getlen_pipe(char *block, int i);
 char		**ft_separatepipes(char *block, t_gen_info *info);
 int			ft_check_redir_inandout_loop(char **block, t_gen_info *info);
+void		ft_get_chars(char *line, int *i, char **new, t_gen_info *info);
 
 /* ----------------------- ft_parse_structcmds_utils.c ---------------------- */
 
