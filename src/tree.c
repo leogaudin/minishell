@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/08 09:16:01 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 13:59:29 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ t_node	*generate_node_from_command(const char *command)
 	root = NULL;
 	token = NULL;
 	commands = NULL;
-	if (exists_out_parenthesis((char *)command, "||"))//this should actually just be the one it encounters first unless parenthesis.
-		token = "||";
-	else if (exists_out_parenthesis((char *)command, "&&"))
+	if (exists_out_parenthesis((char *)command, "&&"))
 		token = "&&";
+	else if (exists_out_parenthesis((char *)command, "||"))
+		token = "||";
 	if (token)
 	{
 		commands = ft_split_str_once(command, token);

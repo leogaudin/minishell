@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute_methods.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 07:35:19 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/11 09:43:31 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 12:54:52 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,7 @@ int	ft_execute(t_cmd *cmds, t_fullcmd fullcmd, int i, t_gen_info *info)
 {
 	int	stdincpy;
 	int	stdoutcpy;
-	int	err;
 
-	err = 0;
 	stdincpy = dup(STDIN_FILENO);
 	if (stdincpy < 0)
 		return (ft_putstrerror("dup: ", info), info->exit_code);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/19 12:56:51 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 13:45:37 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,9 @@ int	ft_changeshlvl(t_gen_info *info)
 
 void	ft_dothingswithline(char *line, t_gen_info *info)
 {
-	int		exit_code;
-
 	add_history(line);
 	info->root = generate_node_from_command(line);
-	exit_code = execute_node(info->root, info);
+	info->exit_code = execute_node(info->root, info);
 	destroy_node(info->root);
 	info->root = NULL;
 	free(line);
