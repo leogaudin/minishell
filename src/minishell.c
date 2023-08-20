@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/20 13:44:56 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 14:19:09 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void sigint_handler(int sig)
 	}
 	else
 	{
-		write(1, "normal\n", 7);
 		rl_on_new_line();
 		rl_redisplay();
 		rl_replace_line("", 0);
