@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 11:52:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/19 16:19:32 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/20 12:46:16 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	ft_findexecmethod(t_fullcmd fullcmd, int *i, t_gen_info *info)
 	}
 	else if (ft_isbuiltin(fullcmd.argums[0]))
 	{
-		g_exit_code = 42;
+		g_code = 42;
 		fullcmd.childpid[*i] = fork();
 		if (fullcmd.childpid[*i] == -1)
 			return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);

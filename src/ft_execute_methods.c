@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute_methods.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 07:35:19 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/19 12:54:52 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:00 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	ft_execparentproc(t_fullcmd	fullcmd, int childpid, int *i, t_gen_info *info)
 
 	ft_closepipeends(fullcmd, i);
 	waitpid(childpid, &childstatus, 0);
+	g_code = 1;
 	if (WIFEXITED(childstatus))
 		info->exit_code = WEXITSTATUS(childstatus);
 	return (info->exit_code);

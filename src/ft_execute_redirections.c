@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute_redirections.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 12:23:23 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/19 16:44:37 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/20 13:05:53 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ int	ft_execheredoc(char *delim, t_gen_info *info)
 	int		fdpair[2];
 	int		same;
 	char	*line;
+	int		stdincpy;
 
+	stdincpy = dup(STDIN_FILENO);
 	if (pipe(fdpair) < 0)
 		return (ft_putstrerror("pipe: ", info), -1);
 	same = 1;
-	g_exit_code = 420;
+	g_code *= 10;
 	while (same != 0)
 	{
 		ft_printf("\033[0;34m> \033[0m");
@@ -37,49 +39,12 @@ int	ft_execheredoc(char *delim, t_gen_info *info)
 			write(fdpair[1], line, ft_strlen(line));
 		free(line);
 	}
+	if (same == 0)
+		dup2(stdincpy, STDIN_FILENO);
+	close(stdincpy);
 	close(fdpair[1]);
 	return (fdpair[0]);
 }
-
-/* int	ft_execheredoc(char *delim)
-{
-	int		fdpair[2];
-	int		same;
-	char	*line;
-	int		childpid;
-
-	if (pipe(fdpair) < 0)
-		return (ft_putendl_fd(strerror(errno), STDERR_FILENO), -1);
-	childpid = fork();
-	if (childpid < 0)
-		return (-1);
-	else if (childpid == 0)
-	{
-		same = 1;
-		while (same != 0)
-		{
-			ft_printf("> ");
-			line = get_next_line(0);
-			//line = readline(">");
-			//write(1, "ABC\n", 4);
-			if (!line)
-				break ;
-			same = ft_strncmp(delim, line, ft_strlen(line) - 1);
-			if (same != 0)
-				write(fdpair[1], line, ft_strlen(line));
-			free(line);
-		}
-		//write(1, "OUTSIDELOOP", ft_strlen("OUTSIDELOOP"));
-		close(fdpair[1]);
-		exit(fdpair[0]);
-	}
-	else
-	{
-		waitpid(childpid, NULL, 0);
-		close(fdpair[1]);
-		return (fdpair[0]);
-	}
-} */
 
 int	ft_exec_redirin(t_cmd *cmds, t_fullcmd fullcmd, int i, t_gen_info *info)
 {
@@ -93,8 +58,9 @@ int	ft_exec_redirin(t_cmd *cmds, t_fullcmd fullcmd, int i, t_gen_info *info)
 	}
 	else if (cmds[i].rein.herein == 1)
 	{
-		g_exit_code = -15;
 		fdin = ft_execheredoc(cmds[i].rein.heredel, info);
+		if (g_code >= 10)
+			g_code /= 10;
 		if (fdin < 0)
 			return (-1);
 		if (dup2(fdin, STDIN_FILENO) < 0)

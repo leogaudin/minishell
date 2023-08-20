@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/19 16:43:08 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/20 13:06:52 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int g_exit_code = 0;
-//int g_other = 0;
+int g_code = 1;
 
 // INFO: This function is not part of the project, it is only used to test the
 // AST generation and execution.
@@ -71,16 +70,17 @@ char	*ft_prompt(t_gen_info *info)
 void sigint_handler(int sig)
 {
 	(void)sig;
-	if (g_exit_code == 42) {
-		write(1, "\033[K\n", 5);
-		rl_replace_line("", 0);
-		g_exit_code = 0;
-	}
-	else if (g_exit_code == 420)
+	if (g_code == 42) 
 	{
 		write(1, "\033[K\n", 5);
+		rl_replace_line("", 0);
+		g_code = 1;
+	}
+	else if (g_code == 420 || g_code == 10)
+	{
+		write(1, "\033[K\n", ft_strlen("\033[K\n"));
 		close(0);
-		g_exit_code = 0;
+		g_code /= 10;
 	}
 	else
 	{
@@ -165,12 +165,10 @@ int main(int argc, char **argv, char **env)
 		if (!line)
 		{
 			rl_clear_history();
-			//ft_freearr(env);
 			ft_exit(ft_strdup("exit"), &info);//use NULL instead of strdup and change ft_exit accordingly
-			//exit(g_exit_code);
 		}
 		if (line && *line)
 			ft_dothingswithline(line, &info);
 	}
-	return (g_exit_code);
+	return (0);
 }

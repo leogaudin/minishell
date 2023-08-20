@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/19 12:30:05 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 12:24:33 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 /* tgetent tgetflag tgetnum tgetstr tgoto tputs */
 # include <term.h>
 
-int	g_exit_code;
+int	g_code;
 
 // tree.c
 typedef struct s_node

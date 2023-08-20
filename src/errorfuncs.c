@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 09:19:52 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/10 14:49:16 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 12:44:52 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	ft_putstrerror(char *str, t_gen_info *info)
 {
 	info->exit_code = errno;
-	//printf("g_exit_code now is -> %i", g_exit_code);
 	write(2, "Minishell: ", ft_strlen("Minishell: "));
 	if (str)
 	{
