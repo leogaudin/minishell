@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 16:39:10 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/19 13:59:29 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/19 16:45:54 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @param    operand   The operand of the node.
  * @return   t_node*   The newly created node.
  */
-t_node	*create_node(char *operator, char * operand)
+t_node	*create_node(char *operator, char *operand)
 {
 	t_node	*new_node;
 
@@ -45,7 +45,8 @@ t_node	*create_operand_node(char *operand)
 	t_node	*new_node;
 
 	operand = strip_parenthesis(operand);
-	if (exists_out_parenthesis(operand, "||") || exists_out_parenthesis(operand, "&&"))
+	if (exists_out_parenthesis(operand, "||")
+		|| exists_out_parenthesis(operand, "&&"))
 	{
 		new_node = generate_node_from_command(operand);
 		free(operand);

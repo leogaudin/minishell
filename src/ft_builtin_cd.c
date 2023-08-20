@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtin_cd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 11:01:43 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/10 14:25:58 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 16:51:16 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	determine_path(char **path, char *home, t_fullcmd fullcmd, t_gen_info *info)
+void	determine_path(char **path, char *home,
+	t_fullcmd fullcmd, t_gen_info *info)
 {
-	(void)info;//remove later
-	//malloc protections!!!
 	if (fullcmd.argums[1] == NULL || !ft_strcmp(fullcmd.argums[1], "~"))
 		*path = ft_strdup(home);
 	else if (ft_strncmp(fullcmd.argums[1], "~/", 2) == 0)
@@ -31,9 +30,10 @@ void	determine_path(char **path, char *home, t_fullcmd fullcmd, t_gen_info *info
 
 int	change_path(char *path, t_fullcmd fullcmd, t_gen_info *info)
 {
-	(void)info;//remove later
+	(void)info;
 	if (chdir(path) == -1)
 	{
+		info->exit_code = errno;
 		ft_printf("cd: %s: %s\n", strerror(errno), fullcmd.argums[1]);
 		free(path);
 		return (1);
@@ -46,7 +46,6 @@ int	update_pwd(char *path, char *oldpath, t_gen_info *info)
 {
 	int	err;
 
-	(void)info;//remove later
 	err = 0;
 	oldpath = ft_strjoinfree("export OLDPWD=", oldpath, 2);
 	if (!oldpath)
@@ -73,18 +72,17 @@ int	ft_cd(t_fullcmd fullcmd, t_gen_info *info)
 	path = NULL;
 	home = ft_getenv("HOME", info);
 	if (!home)
-		return (-1);
-	//oldpath = getcwd(NULL, 0);
-	oldpath = ft_getenv("PWD", info);//changed this so that it works when you do cd .. after removing the directory you were in
+		return (1);
+	oldpath = ft_getenv("PWD", info);
 	if (!oldpath)
-		return (free (home), ft_putendl_fd("Memory allocation failed.", STDERR_FILENO), -1);
+		return (free(home), ft_malloc_error(), 1);
 	determine_path(&path, home, fullcmd, info);
 	if (path == NULL)
-		return (free(oldpath), free(home), ft_printf("cd: HOME not set\n"), 1);//what about malloc error?
+		return (free(oldpath), free(home), ft_malloc_error(), 1);
 	if (change_path(path, fullcmd, info))
 		return (free(oldpath), free(home), 1);
 	path = getcwd(NULL, 0);
 	if (update_pwd(path, oldpath, info))
-		return (-1);
+		return (1);
 	return (free(home), 0);
 }

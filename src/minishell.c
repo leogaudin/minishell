@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/19 16:03:13 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/19 16:43:08 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,27 @@ char	*ft_prompt(t_gen_info *info)
 void sigint_handler(int sig)
 {
 	(void)sig;
-	rl_on_new_line();
-	rl_redisplay();
-	rl_replace_line("", 0);
-	write(1, "\033[K\n", 5);
-	rl_on_new_line();
-	rl_redisplay();
-	rl_replace_line("", 0);
+	if (g_exit_code == 42) {
+		write(1, "\033[K\n", 5);
+		rl_replace_line("", 0);
+		g_exit_code = 0;
+	}
+	else if (g_exit_code == 420)
+	{
+		write(1, "\033[K\n", 5);
+		close(0);
+		g_exit_code = 0;
+	}
+	else
+	{
+		rl_on_new_line();
+		rl_redisplay();
+		rl_replace_line("", 0);
+		write(1, "\033[K\n", 5);
+		rl_on_new_line();
+		rl_redisplay();
+		rl_replace_line("", 0);
+	}
 }
 
 void	sigquit_handler(int sig)

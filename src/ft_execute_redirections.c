@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execute_redirections.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 12:23:23 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/11 09:44:40 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/19 16:44:37 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ int	ft_execheredoc(char *delim, t_gen_info *info)
 	if (pipe(fdpair) < 0)
 		return (ft_putstrerror("pipe: ", info), -1);
 	same = 1;
+	g_exit_code = 420;
 	while (same != 0)
 	{
 		ft_printf("\033[0;34m> \033[0m");
 		line = get_next_line(0);
 		if (!line)
+		{
+			info->exit_code = 1;
 			break ;
+		}
 		else if (*line && *line != '\n')
 			same = ft_strncmp(delim, line, ft_strlen(line) - 1);
 		if (same != 0)
