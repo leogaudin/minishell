@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 08:55:33 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/19 14:44:35 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 18:02:52 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,9 @@ int	ft_check_redir_inandout_loop(char **block, t_gen_info *info)
 	j = 0;
 	while (block[0][j])
 	{
-		ft_skip_str(block, 0, &j);
-		if (block[0][j] == '<')
+		if (block[0][j] == '\"' || block[0][j] == '\'')
+			ft_skip_str(block, 0, &j);
+		else if (block[0][j] == '<')
 			err = ft_check_redirin(block[0], &j, info);
 		else if (block[0][j] == '>')
 			err = ft_check_redirout(block[0], &j, info);
