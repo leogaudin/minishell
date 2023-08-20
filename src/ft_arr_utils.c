@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 11:07:39 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/10 13:54:14 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 14:24:26 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,28 @@ char	**ft_appendtoarr(char **arr, char **app, t_gen_info *info)
 	}
 	newarr[i] = NULL;
 	return (free(arr), free(app), newarr);
+}
+
+char	**ft_arrdup(char **arr, t_gen_info *info)
+{
+	int		i;
+	int		j;
+	char	**new;
+
+	i = 0;
+	while (arr[i])
+		i++;
+	new = malloc((i + 1) * sizeof(char *));
+	if (!new)
+		return (ft_putstrerror("malloc: ", info), NULL);
+	j = 0;
+	while (j < i)
+	{
+		new[j] = ft_strdup(arr[j]);
+		if (!new[j])
+			return (ft_freearr(new), ft_putstrerror("malloc: ", info), NULL);
+		j++;
+	}
+	new[j] = NULL;
+	return (new);
 }

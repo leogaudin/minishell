@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/20 14:17:06 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 14:57:38 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct s_reout
 {
 	int				reout;
 	int				reoutapp;
+	int				outfd;
 	char			*outfile;
 }					t_reout;
 
@@ -114,6 +115,7 @@ typedef struct s_rein
 {
 	int				rein;
 	int				herein;
+	int				herefd;
 	char			*heredel;
 	char			*infile;
 }					t_rein;
@@ -194,6 +196,7 @@ int			ft_arrlen(char **arr);
 char		**ft_arrapp(char **arr, char *app, t_gen_info *info);
 char		**ft_arrremove(char **env, int pos, t_gen_info *info);
 char		**ft_appendtoarr(char **arr, char **app, t_gen_info *info);
+char		**ft_arrdup(char **arr, t_gen_info *info);
 
 /* ----------------------------- ft_builtin_cd.c ---------------------------- */
 
@@ -360,6 +363,14 @@ char		*ft_strjoinfree(char *begin, char *end, int num);
 
 /* ----------------- ft_execute_redirections_heredoc_utils.c ---------------- */
 
-int			ft_heredocloop(int fdpairwrite, char * delim, t_gen_info *info);
+int			ft_heredocloop(int fdpairwrite, char *delim, t_gen_info *info);
+
+/* ------------------------------- minishell.c ------------------------------ */
+
+char		*ft_prompt(t_gen_info *info);
+void		sigint_handler(int sig);
+void		sigquit_handler(int sig);
+int			ft_changeshlvl(t_gen_info *info);
+void		ft_dothingswithline(char *line, t_gen_info *info);
 
 #endif

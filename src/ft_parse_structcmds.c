@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/13 11:16:46 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 15:03:28 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,11 @@ char	*ft_putinstruct_in(t_cmd *cmd, char *blocksep, int *j, t_gen_info *info)
 	if (!name)
 		return (NULL);
 	if (cmd->rein.herein == 1)
+	{
 		cmd->rein.heredel = name;
+		cmd->rein.herefd = ft_execheredoc(cmd->rein.heredel, info);
+		g_code = 1;
+	}
 	else if (cmd->rein.rein == 1)
 		cmd->rein.infile = name;
 	*j += len;
@@ -75,6 +79,10 @@ char	*ft_putinstruct_out(t_cmd *cmd, char *blocksep, int *j, t_gen_info *inf)
 	if (!name)
 		return (NULL);
 	cmd->reout.outfile = name;
+	if (cmd->reout.reout == 1)
+		cmd->reout.outfd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (cmd->reout.reoutapp == 1)
+		cmd->reout.outfd = open(name, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	*j += len;
 	return (name);
 }

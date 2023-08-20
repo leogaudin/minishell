@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 12:23:23 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 14:21:20 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 15:12:34 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,7 @@ int	ft_exec_redirin(t_cmd *cmds, t_fullcmd fullcmd, int i, t_gen_info *info)
 	}
 	else if (cmds[i].rein.herein == 1)
 	{
-		fdin = ft_execheredoc(cmds[i].rein.heredel, info);
-		if (g_code >= 10)
-			g_code /= 10;
+		fdin = cmds[i].rein.herefd;
 		if (fdin < 0)
 			return (-1);
 		if (dup2(fdin, STDIN_FILENO) < 0)
@@ -75,13 +73,13 @@ int	ft_exec_redirout(t_cmd *cmds, t_fullcmd fullcmd, int i, t_gen_info *info)
 
 	if (cmds[i].reout.reout == 1)
 	{
-		fdo = open(cmds[i].reout.outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fdo = cmds[i].reout.outfd;
 		if (ft_dupout(fdo, info))
 			return (-1);
 	}
 	else if (cmds[i].reout.reoutapp == 1)
 	{
-		fdo = open(cmds[i].reout.outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		fdo = cmds[i].reout.outfd;
 		if (ft_dupout(fdo, info))
 			return (-1);
 	}
