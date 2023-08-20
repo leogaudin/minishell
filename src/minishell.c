@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:43 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/20 13:06:52 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 13:44:56 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void sigint_handler(int sig)
 	}
 	else
 	{
+		write(1, "normal\n", 7);
 		rl_on_new_line();
 		rl_redisplay();
 		rl_replace_line("", 0);
@@ -148,6 +149,7 @@ int main(int argc, char **argv, char **env)
 	(void)argv;
 	info.env = NULL;
 	info.exit_code = 0;
+	info.here_code = 0;
 	info.root = NULL;
 	info.prompt = NULL;
 	env = ft_arrdup(env, &info);

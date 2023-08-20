@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/20 12:24:33 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 14:17:06 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_gen_info
 {
 	char	**env;
 	int		exit_code;
+	int		here_code;
 	t_node	*root;
 	char	*prompt;
 }			t_gen_info;
@@ -356,5 +357,9 @@ int			ft_parseandexec(char *line, t_gen_info *info);
 /* ---------------------------- ft_strjoinfree.c ---------------------------- */
 
 char		*ft_strjoinfree(char *begin, char *end, int num);
+
+/* ----------------- ft_execute_redirections_heredoc_utils.c ---------------- */
+
+int			ft_heredocloop(int fdpairwrite, char * delim, t_gen_info *info);
 
 #endif

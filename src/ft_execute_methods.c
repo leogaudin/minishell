@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 07:35:19 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 12:44:00 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 13:40:32 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,15 @@ int	ft_execute(t_cmd *cmds, t_fullcmd fullcmd, int i, t_gen_info *info)
 		return (ft_putstrerror("dup: ", info), info->exit_code);
 	if (ft_exec_redir(cmds, fullcmd, i, info))
 		return (info->exit_code);
-	info->exit_code = ft_choose_builtin(fullcmd, info);
+	if (info->here_code == 0)
+		info->exit_code = ft_choose_builtin(fullcmd, info);
 	if (dup2(stdincpy, STDIN_FILENO) < 0)
 		return (ft_putstrerror("dup2: ", info), info->exit_code);
 	if (dup2(stdoutcpy, STDOUT_FILENO) < 0)
 		return (ft_putstrerror("dup2: ", info), info->exit_code);
 	close(stdincpy);
 	close(stdoutcpy);
+	info->here_code = 0;
 	return (info->exit_code);
 }
 
@@ -73,6 +75,11 @@ int	ft_execchildproc(t_cmd *cmds, t_fullcmd fullcmd, int i, t_gen_info *info)
 	if (ft_exec_redirout(cmds, fullcmd, i, info))
 		exit(info->exit_code);
 	ft_execcloseall(fullcmd.fds, fullcmd.cmdct);
+	if (info->here_code == 1)
+	{
+		info->here_code = 0;
+		exit(info->exit_code);
+	}
 	if (execve(fullcmd.argums[0], fullcmd.argums, info->env) < 0)
 	{
 		ft_putstrerror("execve: ", info);

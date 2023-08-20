@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 11:52:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 12:46:16 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 13:38:59 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	ft_executeempty(t_fullcmd fullcmd, int *i, t_gen_info *info)
 	close(stdoutcpy);
 	ft_closepipeends(fullcmd, i);
 	(*i)++;
+	info->here_code = 0;
 	return (info->exit_code);
 }
 

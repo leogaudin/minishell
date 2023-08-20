@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 12:23:23 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 13:05:53 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 14:14:33 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,15 @@
 int	ft_execheredoc(char *delim, t_gen_info *info)
 {
 	int		fdpair[2];
-	int		same;
-	char	*line;
 	int		stdincpy;
+	int 	same;
 
 	stdincpy = dup(STDIN_FILENO);
 	if (pipe(fdpair) < 0)
 		return (ft_putstrerror("pipe: ", info), -1);
-	same = 1;
 	g_code *= 10;
-	while (same != 0)
-	{
-		ft_printf("\033[0;34m> \033[0m");
-		line = get_next_line(0);
-		if (!line)
-		{
-			info->exit_code = 1;
-			break ;
-		}
-		else if (*line && *line != '\n')
-			same = ft_strncmp(delim, line, ft_strlen(line) - 1);
-		if (same != 0)
-			write(fdpair[1], line, ft_strlen(line));
-		free(line);
-	}
-	if (same == 0)
+	same = ft_heredocloop(fdpair[1], delim, info);
+	if (same != 0)
 		dup2(stdincpy, STDIN_FILENO);
 	close(stdincpy);
 	close(fdpair[1]);

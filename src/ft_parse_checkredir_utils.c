@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 14:41:29 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/12 09:36:44 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 14:09:13 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,12 @@ int	ft_check_hereorin(int here, char **name, char *pipe_block, t_gen_info *info)
 {
 	if (here == 1)
 	{
-		if (ft_open_notlast_heredoc(name[0], pipe_block, info))
+		if (ft_open_notlast_heredoc(name[0], pipe_block, info)
+			|| info->here_code == 1)
+		{
+			info->here_code = 0;
 			return (free(name[0]), -1);
+		}
 	}
 	else
 	{
