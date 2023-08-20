@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 12:23:23 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 14:14:33 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 14:21:20 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_execheredoc(char *delim, t_gen_info *info)
 {
 	int		fdpair[2];
 	int		stdincpy;
-	int 	same;
+	int		same;
 
 	stdincpy = dup(STDIN_FILENO);
 	if (pipe(fdpair) < 0)

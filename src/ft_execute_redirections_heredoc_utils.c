@@ -6,13 +6,13 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 14:10:20 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 14:13:58 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/20 14:21:39 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_heredocloop(int fdpairwrite, char * delim, t_gen_info *info)
+int	ft_heredocloop(int fdpairwrite, char *delim, t_gen_info *info)
 {
 	int		same;
 	char	*line;
