@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:26:47 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 15:03:28 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 16:52:36 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	ft_skip_str(char **blocksep, int i, int *j)
 			(*j)++;
 		(*j)++;
 	}
+	else
+		(*j)++;
 }
 
 char	*ft_putinstruct_in(t_cmd *cmd, char *blocksep, int *j, t_gen_info *info)
