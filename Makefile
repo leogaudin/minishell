@@ -35,6 +35,8 @@ NAME = minishell
 
 all: $(NAME)
 
+bonus: all
+
 $(NAME): $(OBJ_FILES) $(LIBFT)
 	@$(CC) $(CFLAGS) $(LIBS) -o $@ $^
 	@echo "$(GREEN)+ $(NAME)$(RESET)"
