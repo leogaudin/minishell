@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_checkredir_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 14:41:29 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 14:09:13 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:50:22 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,16 @@ char	*ft_namefile_complete(char **asterisk_exp_arr, t_gen_info *info)
 	}
 	else if (ft_arrlen(asterisk_exp_arr) == 0)
 	{
-		ft_putendl_fd("Minishell: name: No such file or directory.", 2);//cmt1
+		ft_putendl_fd("Minishell: No such file or directory.", 2);
 		info->exit_code = 1;
 	}
 	else if (ft_arrlen(asterisk_exp_arr) > 1)
 	{
-		ft_putendl_fd("Minishell: name: Ambiguous redirect.", 2);//cmt2
+		ft_putendl_fd("Minishell: Ambiguous redirect.", 2);
 		info->exit_code = 1;
 	}
 	return (name_complete);
 }
-//cmt1: -->change so that name is the actual name
-//cmt2: -->change so that name is the actual name
 
 char	*ft_namefile(char *name, t_gen_info *info)
 {

@@ -6,7 +6,7 @@
 /*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 11:37:27 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/19 13:02:17 by lgaudin          ###   ########.fr       */
+/*   Updated: 2023/08/21 14:47:43 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ char	*ft_execpathname2(char *cmd, char **paths, int off, t_gen_info *info)
 	{
 		if (off == 0)
 		{
-			ft_puterror(": command not found", e, cmd + (++off), NULL);
+			ft_puterror(": command not found", cmd + (++off), NULL);
 			info->exit_code = e;
 		}
 		else
 		{
-			ft_puterror(": no such file or directory", e, cmd + (++off), NULL);
+			ft_puterror(": no such file or directory", cmd + (++off), NULL);
 			info->exit_code = e;
 		}
 	}

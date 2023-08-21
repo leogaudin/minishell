@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errorfuncs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 09:19:52 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 12:44:52 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:47:47 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ void	ft_putstrerror(char *str, t_gen_info *info)
 	ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
-void	ft_puterror(char *error, int code, char *str1, char *str2)
+void	ft_puterror(char *error, char *str1, char *str2)
 {
-	(void)code;//remove at some point please
 	write(2, "Minishell: ", ft_strlen("Minishell: "));
 	if (str1)
 		write(2, str1, ft_strlen(str1));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expandvar.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 08:27:23 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/10 13:57:32 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:48:57 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * @param pos : the position of the $ preceeding the varaible name we want to
  *  replace.
  * @param len : the length of the variable name.
- * 
+ *
  * In this function we replace a variable name by its value. We first put the
  *  part of the string that comes before the variable in the string variable
  *  begin, then we get the string value of the variable with the getenv function
@@ -35,7 +35,7 @@ char	*ft_replace(char *line, char *varname, int *pos, t_gen_info *info)
 	char	*end;
 	char	*beginvarend;
 
-	begin = ft_substr(line, 0, *pos - 1);//malloc error msg?
+	begin = ft_substr(line, 0, *pos - 1);
 	if (!begin)
 		return (free(line), ftme(info), NULL);
 	var = ft_getenv(varname, info);
@@ -62,7 +62,7 @@ char	*ft_replacewave(char *line, int *pos, t_gen_info *info)
 	char	*end;
 	char	*beginvarend;
 
-	begin = ft_substr(line, 0, *pos);//malloc error msg?
+	begin = ft_substr(line, 0, *pos);
 	if (!begin)
 		return (free(line), ftme(info), NULL);
 	var = ft_getenv("HOME", info);
@@ -84,13 +84,13 @@ char	*ft_replacewave(char *line, int *pos, t_gen_info *info)
 /**
  * @param i : pointer to int that initially holds the position where a '$' was
  *  encountered, at the end we set it.............
- * 
+ *
  * In this function we count the number of alphanumeric characters and
  *  underscores after the dollar sign as variable names can only contain those
  *  characters. We then make a sub string of the line only containing the
  *  variable name. We then replace expline by the result of the ft_replace
  *  function that replaces the variable name by its value. This string is also
- *  the return value of this function. 
+ *  the return value of this function.
  */
 char	*ft_getvar_and_replace(int *i, char *expline, t_gen_info *info)
 {
@@ -150,7 +150,7 @@ int	ft_expandvar_loopfunc(char **line, int *i, t_openq *open, t_gen_info *info)
 /**
  * @param line : line in which we want to replace variable names by their
  *  corresponding string value.
- * 
+ *
  * In this function we replace all variable names by their string value unless
  *  it is inside a string delimited by single quotation marks. We duplicate the
  *  original line and traverse it until we find a '$' character. If it is not
@@ -166,7 +166,7 @@ char	*ft_expandvar(char *line, t_gen_info *info)
 	i = -1;
 	open.opens = 0;
 	open.opend = 0;
-	expline = ft_strdup(line);//malloc protection
+	expline = ft_strdup(line);
 	while (expline && expline[++i])
 	{
 		if (ft_expandvar_loopfunc(&expline, &i, &open, info))

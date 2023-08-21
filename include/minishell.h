@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 15:26:37 by lgaudin           #+#    #+#             */
-/*   Updated: 2023/08/20 14:57:38 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:47:50 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ typedef struct s_open_quote
 /* ------------------------------ errorfuncs.c ------------------------------ */
 
 void		ft_putstrerror(char *str, t_gen_info *info);
-void		ft_puterror(char *error, int code, char *str1, char *str2);
+void		ft_puterror(char *error, char *str1, char *str2);
 int			ft_put_error(char *error, int code, char *str1, char *str2);
 void		ftme(t_gen_info *info);
 

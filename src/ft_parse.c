@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 08:31:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/14 10:27:21 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:45:12 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,9 @@ int	ft_parseandexec(char *line, t_gen_info *info)
 
 	err = check_first_last_char(line, info);
 	if (err < 0)
-		return (258);//-->error code when syntax error
+		return (258);
 	else if (err > 0)
-		return (0);//-->command line with only whitespace chars, should be exit?
+		return (info->exit_code);
 	separate_pipe = ft_separate_pipe(line, info);
 	if (!separate_pipe)
 		return (-1);

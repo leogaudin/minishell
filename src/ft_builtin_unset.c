@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtin_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 11:04:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/11 08:59:21 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:46:41 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,10 @@ int	ft_unset(t_fullcmd fullcmd, t_gen_info *info)
 				return (ft_putstrerror("malloc: ", info), info->exit_code);
 			varpos = ft_existenv(varname, info);
 			free(varname);
-			info->env = ft_arrremove(info->env, varpos, info);//cmt1
+			info->env = ft_arrremove(info->env, varpos, info);
 			if (!info->env)
 				return (info->exit_code);
 		}
 	}
 	return (info->exit_code);
 }
-//cmt1: what if null, because then no more env

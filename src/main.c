@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 14:27:49 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/20 14:33:59 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:46:16 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,10 @@ int	main(int argc, char **argv, char **env)
 		if (!line)
 		{
 			rl_clear_history();
-			ft_exit(ft_strdup("exit"), &info);//cmt1
+			ft_exit(ft_strdup("exit"), &info);
 		}
 		if (line && *line)
 			ft_dothingswithline(line, &info);
 	}
 	return (0);
 }
-
-//cmt1: use NULL instead of strdup and change ft_exit accordingly

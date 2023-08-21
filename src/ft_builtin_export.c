@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtin_export.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: lgaudin <lgaudin@student.42malaga.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 11:03:28 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/10 14:24:41 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:48:12 by lgaudin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ft_export_replaceaddvar(t_fullcmd fullcmd, t_gen_info *info, int i, int len)
 	}
 	else
 	{
-		info->env = ft_arrapp(info->env, varname, info);//cmt1
+		info->env = ft_arrapp(info->env, varname, info);
 		if (!info->env)
 			return (info->exit_code);
 	}
@@ -93,4 +93,3 @@ int	ft_export(t_fullcmd fullcmd, t_gen_info *info)
 	}
 	return (info->exit_code);
 }
-//cmt1: what if null, because then no more env
