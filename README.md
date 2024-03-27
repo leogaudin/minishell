@@ -1,13 +1,13 @@
 <div align="center">
 	<h1>🐚 <s>minis</s><i>hell</i></h1>
 	<p>This project is about creating a simple shell. Yes, your own little bash. You will learn a lot about processes and file descriptors.</p>
-	<img src="https://img.shields.io/badge/norminette-KO-red"/>
+	<img src="https://img.shields.io/badge/norminette-pass-success"/>
 	<a href="https://developer.apple.com/library/archive/documentation/Performance/Conceptual/ManagingMemory/Articles/FindingLeaks.html">
-		<img src="https://img.shields.io/badge/leaks-KO-red" />
+		<img src="https://img.shields.io/badge/leaks-none-success" />
 	</a>
 	<img src="https://img.shields.io/badge/bonus-included-success"/>
 	<br />
-	<img src="https://img.shields.io/badge/unknown%2F100-important?logo=42&logoColor=fff" />
+	<img src="https://img.shields.io/badge/125%2F100-success?logo=42&logoColor=fff" />
 </div>
 
 <h2>⚠️ This project is currently in progress and is neither finished nor tested</h2>
